@@ -1,2 +1,2 @@
-# Prosjekt
-Prosjekt i TTT4270 Elsys prosjekt
+# TTT4270 Elsys Prosjekt
+Prosjekt i TTT4270. 
