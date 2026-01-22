@@ -1,6 +1,7 @@
 # TTT4270 Elsys Prosjekt
 Prosjekt i TTT4270. 
 
+## Semesterplan
 |Uke  |  Milepæl	| Leveranser |	Aktiviteter |	Merknader |
 |-|-|-|-|-|
 |2    |	Gruppeetablering og oppstart	    | Gruppekontrakt	  | Bli-kjent dag (torsdag)	| Ikke noe om prosjektet denne uka |
