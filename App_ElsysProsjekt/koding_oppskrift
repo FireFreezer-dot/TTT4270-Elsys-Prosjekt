@@ -1,0 +1,33 @@
+Oppskrift for koding:
+
+hvis første gang:
+
+Gå til terminalen i VS code:
+
+skriv: 
+git clone https://github.com/FireFreezer-dot/TTT4270-Elsys-Prosjekt.git
+Dette henter filene i giten til din vs code
+
+skriv:
+cd TTT4270-Elsys-Prosjekt
+får deg inn i repoen
+
+slå deg løs
+
+når du er ferdig skriv i terminal:
+git status
+viser hvilke filer du har gjort endringer i
+
+hvis dette stemmer skriv: 
+git add .    (hvis du vil lime inn alt)
+git add App_ElsysProsjekt/FIL-NAVN.html     (for å legge til kun 1 fil)
+
+Skriv hva du har endra:
+git commit -m "feks. hei jeg har lagt til nudes på side 3 :)"
+
+avslutt med:
+git push
+
+
+
+Dersom du skal kode igjen etter å ha orget tidligere. bare skriv: git pull      før du begynner å kode
