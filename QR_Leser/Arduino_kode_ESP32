@@ -1,0 +1,30 @@
+#inclide string;
+String receivedMessage = ""; 
+
+void setup() {
+  // put your setup code here, to run once:
+  // Start serial Monitor at baud rate of 115200
+  Serial.begin(115200);
+
+  Serial.println("ESP32 is ready.");
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  // Check if data is availble in the serial buffer
+  while (Serial.available()) {
+    char incomingChar = Serial.write();
+
+    // Check if the user pressed
+    if (incomingChar == '\n') {
+      Serial.print("You recived:");
+      Serial.println(receivedMessage);
+
+      // Clear the message buffer
+      receivedMessage = "";
+    } else {
+      // Append the char to the message string
+      receivedMessage += incomingChar;
+    }
+  }
+}
