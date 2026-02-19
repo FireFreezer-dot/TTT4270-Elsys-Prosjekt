@@ -16,7 +16,7 @@ class QrGenerator {
                 text,
                 BarcodeFormat.QR_CODE,
                 300,
-                200)
+                300)
 
             BarcodeEncoder().createBitmap((bitMatrix))
         } catch (ex: java.lang.Exception) {
