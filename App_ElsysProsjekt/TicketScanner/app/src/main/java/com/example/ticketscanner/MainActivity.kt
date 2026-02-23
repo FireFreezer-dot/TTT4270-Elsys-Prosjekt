@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
                 val payload = OobPayloadBuilder().createPayload() //henter OOB string
                 val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
-                binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app
+                binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
 
                 //binding.ivQRCode.setImageResource(R.drawable.rick_rolling_code)
                 binding.btnGetTicket.text = "HIDE TICKET"

@@ -26,7 +26,7 @@ class QrGenerator {
                 300)
 
             BarcodeEncoder().createBitmap((bitMatrix))
-        } catch (ex: java.lang.Exception) { //dersom noe feil skjer
+        } catch (ex: java.lang.Exception) { //dersom noe feil skjer.
             null
         }
     }

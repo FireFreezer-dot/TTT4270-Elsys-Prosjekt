@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.ticketscanner.app-mergeDebugResources-32:/values-he/values-he.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\stian\\.gradle\\caches\\9.1.0\\transforms\\f4428f77e1ba009b84d7321383f15f80\\workspace\\transformed\\zxing-android-embedded-4.3.0\\res\\values-he\\values-he.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,111,161,296",
+                        "endColumns": "55,49,134,89",
+                        "endOffsets": "106,156,291,381"
+                    }
+                }
+            ]
+        }
+    ]
+}
