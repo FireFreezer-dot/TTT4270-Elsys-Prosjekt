@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/> <!--Laegger inn eksplisitte permissions for BLE pairing for android 12+ (vi skal bruke 13)-->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/> <!--Legger inn eksplisitte permissions for BLE pairing for android 12+ (vi skal bruke 13)-->
 
     <application
         android:allowBackup="true"

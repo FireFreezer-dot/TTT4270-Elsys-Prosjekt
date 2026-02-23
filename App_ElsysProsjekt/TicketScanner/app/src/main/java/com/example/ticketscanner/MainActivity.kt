@@ -33,7 +33,12 @@ class MainActivity : AppCompatActivity() {
         binding.btnGetTicket.setOnClickListener {
             Log.d("MainActivity", binding.btnGetTicket.text.toString())
             if(!ticketShown) {
-                binding.ivQRCode.setImageResource(R.drawable.rick_rolling_code)
+
+                val payload = OobPayloadBuilder().createPayload() //henter OOB string
+                val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
+                binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app
+
+                //binding.ivQRCode.setImageResource(R.drawable.rick_rolling_code)
                 binding.btnGetTicket.text = "HIDE TICKET"
             }
             else {
@@ -49,3 +54,4 @@ class MainActivity : AppCompatActivity() {
             //Log.d("MainActivity", "$firstName $lastName")
     }
 }
+
