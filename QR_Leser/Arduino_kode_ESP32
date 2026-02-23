@@ -1,9 +1,5 @@
-#define TXD1 3
-#define RXD1 4
-
-String receivedMessage = ""; 
-
-HardwareSerial mySerial(2);
+#define TXD1 16
+#define RXD1 17
 
 // Use Serial1 for UART communication
 HardwareSerial mySerial(2);
@@ -19,7 +15,7 @@ void loop() {
   // Check if data is available to read
   if (mySerial.available()) {
     // Read data and display it
-    String message = mySerial.readStringUntil('\n');
+    String message = mySerial.readStringUntil('*');
     Serial.println("Received: " + message);
   }
 }
