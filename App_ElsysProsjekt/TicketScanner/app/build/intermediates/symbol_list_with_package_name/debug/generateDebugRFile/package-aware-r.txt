@@ -1,0 +1,17 @@
+com.example.ticketscanner
+color black
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id btnGetTicket
+id ivQRCode
+id main
+layout activity_main
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string get_ticket
+style Base_Theme_TicketScanner
+style Theme_TicketScanner
+xml backup_rules
+xml data_extraction_rules
