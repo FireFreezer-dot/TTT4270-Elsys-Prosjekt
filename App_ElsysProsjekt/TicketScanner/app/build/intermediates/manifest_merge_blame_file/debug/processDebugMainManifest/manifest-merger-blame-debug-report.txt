@@ -9,14 +9,14 @@
 9        android:targetSdkVersion="36" />
 10
 11    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-11-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:5-77
-11-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:22-75
+11-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:4:5-77
+11-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:4:22-75
 12    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-12-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:7:5-75
-12-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:7:22-73
+12-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:5:5-75
+12-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:5:22-73
 13    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-13-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:8:5-72
-13-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:8:22-70
+13-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:5-72
+13-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:22-70
 14
 15    <permission
 15-->[androidx.core:core:1.17.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\a2ab3c048dc55c2017a8053558a2dd96\workspace\transformed\core-1.17.0\AndroidManifest.xml:22:5-24:47
@@ -66,46 +66,46 @@
 37-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\f4428f77e1ba009b84d7321383f15f80\workspace\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:42:5-44:36
 38        android:name="android.hardware.wifi"
 38-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\f4428f77e1ba009b84d7321383f15f80\workspace\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:43:9-45
-39        android:required="false" /> <!-- Legger inn eksplisitte permissions for BLE pairing for android 12+ (vi skal bruke 13) -->
+39        android:required="false" /> <!-- Laegger inn eksplisitte permissions for BLE pairing for android 12+ (vi skal bruke 13) -->
 39-->[com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\f4428f77e1ba009b84d7321383f15f80\workspace\transformed\zxing-android-embedded-4.3.0\AndroidManifest.xml:44:9-33
 40    <application
-40-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:10:5-28:19
+40-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:8:5-26:19
 41        android:allowBackup="true"
-41-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:11:9-35
+41-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:9:9-35
 42        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 42-->[androidx.core:core:1.17.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\a2ab3c048dc55c2017a8053558a2dd96\workspace\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
 43        android:dataExtractionRules="@xml/data_extraction_rules"
-43-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:12:9-65
+43-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:10:9-65
 44        android:debuggable="true"
 45        android:extractNativeLibs="false"
 46        android:fullBackupContent="@xml/backup_rules"
-46-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:13:9-54
+46-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:11:9-54
 47        android:icon="@mipmap/ic_launcher"
-47-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:14:9-43
+47-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:12:9-43
 48        android:label="@string/app_name"
-48-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:9-41
+48-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:13:9-41
 49        android:roundIcon="@mipmap/ic_launcher_round"
-49-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:16:9-54
+49-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:14:9-54
 50        android:supportsRtl="true"
-50-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:17:9-35
+50-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:9-35
 51        android:testOnly="true"
 52        android:theme="@style/Theme.TicketScanner" >
-52-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:18:9-51
+52-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:16:9-51
 53        <activity
-53-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:19:9-27:20
+53-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:17:9-25:20
 54            android:name="com.example.ticketscanner.MainActivity"
-54-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:20:13-41
+54-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:18:13-41
 55            android:exported="true" >
-55-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:21:13-36
+55-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:19:13-36
 56            <intent-filter>
-56-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:22:13-26:29
+56-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:20:13-24:29
 57                <action android:name="android.intent.action.MAIN" />
-57-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:23:17-69
-57-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:23:25-66
+57-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:21:17-69
+57-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:21:25-66
 58
 59                <category android:name="android.intent.category.LAUNCHER" />
-59-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:25:17-77
-59-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:25:27-74
+59-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:23:17-77
+59-->C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:23:27-74
 60            </intent-filter>
 61        </activity>
 62

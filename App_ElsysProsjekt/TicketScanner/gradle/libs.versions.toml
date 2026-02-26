@@ -27,4 +27,3 @@ zxing-core = { module = "com.google.zxing:core", version.ref = "zxingCore" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 
-#asdasds
