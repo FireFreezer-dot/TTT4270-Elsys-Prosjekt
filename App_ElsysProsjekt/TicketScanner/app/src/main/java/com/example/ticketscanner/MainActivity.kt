@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", binding.btnGetTicket.text.toString())
             if(!ticketShown) {
 
-                val payload = OobPayloadBuilder().createPayload() //henter OOB string
+                val payload = OobPayloadBuilder().buildPayload() //henter OOB string
                 val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
                 binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
 
