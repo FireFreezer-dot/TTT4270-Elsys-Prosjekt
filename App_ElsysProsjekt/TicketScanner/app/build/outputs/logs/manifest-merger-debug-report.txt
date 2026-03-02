@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-32:12
-INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-32:12
-INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-32:12
-INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-32:12
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-36:12
+INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:2:1-36:12
 MERGED from [androidx.databinding:viewbinding:9.0.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\97cfc7aa7753e4ecb428869c6bc4bdf7\workspace\transformed\viewbinding-9.0.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.10.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\fdbd5210e97cf78cd93879dd5a25736d\workspace\transformed\material-1.10.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\stian\.gradle\caches\9.1.0\transforms\c131c3c09282a5d36aeb54241d98e053\workspace\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -73,8 +73,8 @@ ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjek
 	android:name
 		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:22-70
 application
-ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:11:5-29:19
-INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:11:5-29:19
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:5-33:19
+INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:5-33:19
 MERGED from [com.google.android.material:material:1.10.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\fdbd5210e97cf78cd93879dd5a25736d\workspace\transformed\material-1.10.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.10.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\fdbd5210e97cf78cd93879dd5a25736d\workspace\transformed\material-1.10.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\stian\.gradle\caches\9.1.0\transforms\c131c3c09282a5d36aeb54241d98e053\workspace\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -98,37 +98,37 @@ MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] C:\Users\stian\.gradl
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.17.0] C:\Users\stian\.gradle\caches\9.1.0\transforms\a2ab3c048dc55c2017a8053558a2dd96\workspace\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:18:9-35
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:22:9-35
 	android:label
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:16:9-41
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:20:9-41
 	android:fullBackupContent
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:14:9-54
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:18:9-54
 	android:roundIcon
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:17:9-54
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:21:9-54
 	android:icon
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:9-43
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:19:9-43
 	android:allowBackup
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:12:9-35
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:16:9-35
 	android:theme
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:19:9-51
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:23:9-51
 	android:dataExtractionRules
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:13:9-65
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:17:9-65
 activity#com.example.ticketscanner.MainActivity
-ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:20:9-28:20
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:24:9-32:20
 	android:exported
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:22:13-36
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:26:13-36
 	android:name
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:21:13-41
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:25:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:23:13-27:29
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:27:13-31:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:24:17-69
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:28:17-69
 	android:name
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:24:25-66
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:28:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:26:17-77
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:30:17-77
 	android:name
-		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:26:27-74
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:30:27-74
 uses-sdk
 INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml

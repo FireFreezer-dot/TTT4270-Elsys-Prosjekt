@@ -10,6 +10,12 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- Laegger inn eksplisitte permissions for BLE pairing for android 12+ (vi skal bruke 13) -->
+    <!-- Required if you use scan results to derive physical location -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> , trenger ikke for android 12+ -->
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 
     <permission
@@ -37,8 +43,6 @@
     <uses-feature
         android:name="android.hardware.wifi"
         android:required="false" /> <!-- Laegger inn eksplisitte permissions for BLE pairing for android 12+ (vi skal bruke 13) -->
-    <!-- Required if you use scan results to derive physical location -->
-    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> , trenger ikke for android 12+ -->
     <application
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
