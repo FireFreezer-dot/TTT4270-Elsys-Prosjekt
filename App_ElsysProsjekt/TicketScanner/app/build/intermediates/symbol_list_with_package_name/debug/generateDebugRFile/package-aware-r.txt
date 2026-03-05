@@ -4,6 +4,8 @@ color white
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 id btnGetTicket
+id etTicketAmount
+id etTicketName
 id ivQRCode
 id main
 layout activity_main

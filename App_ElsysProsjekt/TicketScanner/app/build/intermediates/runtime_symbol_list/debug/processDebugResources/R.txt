@@ -3250,6 +3250,8 @@ int id end 0x7f0800b0
 int id endToStart 0x7f0800b1
 int id enterAlways 0x7f0800b2
 int id enterAlwaysCollapsed 0x7f0800b3
+int id etTicketAmount 0x7f080204
+int id etTicketName 0x7f080205
 int id exitUntilCollapsed 0x7f0800b4
 int id expand_activities_button 0x7f0800b5
 int id expanded_menu 0x7f0800b6

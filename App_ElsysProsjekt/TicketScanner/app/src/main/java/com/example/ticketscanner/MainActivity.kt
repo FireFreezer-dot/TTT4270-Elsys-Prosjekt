@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.util.Log
 import com.example.ticketscanner.databinding.ActivityMainBinding
 import android.R.bool
+import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,19 +32,42 @@ class MainActivity : AppCompatActivity() {
         var ticketShown : Boolean = false
 
         binding.btnGetTicket.setOnClickListener {
-            Log.d("MainActivity", binding.btnGetTicket.text.toString())
-            if(!ticketShown) {
+
+            // 1 Initialisering av verdier
+            var name: String
+            var amount: Int
+            var canShowTicket : Boolean = false
+            //Sjekker om begge inputfelt er fylt ut også gjør vi de om til riktig format
+            if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty()) {
+                name = binding.etTicketName.text.toString()
+                //Henter innhold fra inputfelt og konverterer til en Int. Gir null hvis ikke en Int.
+                amount = binding.etTicketAmount.text.toString().toIntOrNull() ?: 0
+                if (amount < 0 && amount <= 12) {
+                    canShowTicket = true
+                }
+            }
+
+            // 2 Sjekker tilstanden til programmet å går ut ifra det.
+            // Viser ikke billet + gyldig tekst => hvis billet.
+            if(!ticketShown && canShowTicket) {
 
                 val payload = OobPayloadBuilder().buildPayload() //henter OOB string
                 val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
                 binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
 
-                //binding.ivQRCode.setImageResource(R.drawable.rick_rolling_code)
+                //Endrer eller skjuler knapp tekst / tekstfelt.
                 binding.btnGetTicket.text = "HIDE TICKET"
+                binding.etTicketAmount.visibility = View.GONE
+                binding.etTicketName.visibility = View.GONE
             }
             else {
                 binding.ivQRCode.setImageResource(0)
                 binding.btnGetTicket.setText(R.string.get_ticket)
+                binding.etTicketAmount.visibility = View.VISIBLE
+                binding.etTicketName.visibility = View.VISIBLE
+                //Fjerner teksten fra disse inputfeltene.
+                binding.etTicketName.text.clear()
+                binding.etTicketAmount.text.clear()
             }
             ticketShown = !ticketShown
         }
