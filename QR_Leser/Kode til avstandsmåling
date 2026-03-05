@@ -1,0 +1,107 @@
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEScan.h>
+#include <cmath>
+#include <map>
+#include <vector>
+#include <numeric>
+
+// --- KONFIGURASJON ---
+const std::vector<String> TARGET_NAMES = {"iPhone", "Galaxy S24", "MacBook"}; // Legg til enheter her
+const int MEASURED_POWER = -51;
+const float N = 2.0;
+const float scanTime = 1;
+const int MAX_SAMPLES = 5; // Antall målinger som gjennomsnittsberegnes
+
+BLEScan* pBLEScan;
+
+// Lagrer RSSI-historikk per enhet
+std::map<String, std::vector<int>> rssiHistory;
+
+float calculateDistance(float avgRssi) {
+  if (avgRssi == 0) return -1.0;
+  return pow(10, (float)(MEASURED_POWER - avgRssi) / (10 * N));
+}
+
+float getAverageRssi(const String& name) {
+  auto& history = rssiHistory[name];
+  if (history.empty()) return 0;
+  float sum = std::accumulate(history.begin(), history.end(), 0);
+  return sum / history.size();
+}
+
+bool isTargetDevice(const String& name) {
+  for (const auto& target : TARGET_NAMES) {
+    if (name == target) return true;
+  }
+  return false;
+}
+
+class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
+    void onResult(BLEAdvertisedDevice advertisedDevice) {
+      if (!advertisedDevice.haveName()) return;
+
+      String name = String(advertisedDevice.getName().c_str());
+      if (!isTargetDevice(name)) return;
+
+      int rssi = advertisedDevice.getRSSI();
+
+      // Legg til ny måling, behold kun de siste MAX_SAMPLES
+      auto& history = rssiHistory[name];
+      history.push_back(rssi);
+      if ((int)history.size() > MAX_SAMPLES) {
+        history.erase(history.begin());
+      }
+
+      float avgRssi = getAverageRssi(name);
+      float distance = calculateDistance(avgRssi);
+      int sampleCount = history.size();
+
+      Serial.println("-----------------------");
+      Serial.printf("Enhet:              %s\n", name.c_str());
+      Serial.printf("Siste RSSI:         %d dBm\n", rssi);
+      Serial.printf("Gjennomsnitt RSSI:  %.1f dBm (%d/%d målinger)\n", avgRssi, sampleCount, MAX_SAMPLES);
+      Serial.printf("Estimert avstand:   %.2f meter\n", distance);
+    }
+};
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Starter BLE-skanner...");
+  Serial.print("Søker etter: ");
+  for (int i = 0; i < (int)TARGET_NAMES.size(); i++) {
+    Serial.print(TARGET_NAMES[i]);
+    if (i < (int)TARGET_NAMES.size() - 1) Serial.print(", ");
+  }
+  Serial.println();
+
+  BLEDevice::init("");
+  pBLEScan = BLEDevice::getScan();
+  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+  pBLEScan->setActiveScan(true);
+  pBLEScan->setInterval(100);
+  pBLEScan->setWindow(99);
+}
+
+void loop() {
+  Serial.println("\nSkanner etter mål...");
+  pBLEScan->start(scanTime, false);
+  pBLEScan->clearResults();
+
+  // Oppsummering etter hver skann-runde
+  bool anyFound = false;
+  for (const auto& name : TARGET_NAMES) {
+    if (rssiHistory.count(name) && !rssiHistory[name].empty()) {
+      if (!anyFound) {
+        Serial.println("\n=== OPPSUMMERING ===");
+        anyFound = true;
+      }
+      float avgRssi = getAverageRssi(name);
+      float distance = calculateDistance(avgRssi);
+      Serial.printf("%-20s | RSSI: %6.1f dBm | Avstand: %.2f m\n",
+                    name.c_str(), avgRssi, distance);
+    }
+  }
+
+  delay(500);
+}
