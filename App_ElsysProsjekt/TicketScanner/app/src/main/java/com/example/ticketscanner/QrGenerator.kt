@@ -23,18 +23,22 @@ class OobPayloadBuilder {
         return "TICKET-" + UUID.randomUUID().toString().take(8)
     }
 
+    var lastSessionKey: String? = null //lagrer sessionkey i variabelm, til BLE connection
+        private set
 
-    fun buildPayload(): String {
+    fun buildPayload(name: String, amount: Int): String {
 
-        val customerName = "Ola Nordmann"
-        val amountCostumers = 1
+        //val customerName = "Ola Nordmann"
+        //val amountCostumers = 1
         val sessionKey = generateSessionKey()
         val ticketID = generateTicketID()
 
+        lastSessionKey = sessionKey
+
         val json = JSONObject().apply {
             put("ticketID", ticketID)
-            put("amountCustomers", amountCostumers)
-            put("customerName", customerName)
+            put("amountCustomers", amount)
+            put("customerName", name)
             put("sessionKey", sessionKey)
         }
 
