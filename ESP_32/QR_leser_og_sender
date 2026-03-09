@@ -1,0 +1,99 @@
+#include "esp_now.h"
+#include "WiFi.h"
+#include "ArduinoJson.h"
+#define TXD2 16
+#define RXD2 17
+
+//Definer den scannede meldingen
+String recievedMessage = "";
+
+//Use Serial2 for UART kommunikasjon
+HardwareSerial mySerial(2);
+
+//Definerer MAC-adresse til mottaker
+uint8_t broadcastAddress[] = {0xE4, 0x65, 0xB8, 0x7E, 0x1C, 0x04}; 
+
+//Lager en strukt for å komprimere JSON-filen til
+typedef struct struct_message {
+  char ticketID[32];
+  int amountCustomers;
+  char customerName[32];
+  char sessionKey[40];  
+} struct_message;
+
+//Definerer myData som skal sendes via ESP-NOW
+struct_message myData;
+
+//Definerer infor om peer
+esp_now_peer_info_t peerInfo;
+
+
+void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
+  Serial.print("\r\nLast Packet Send Status:\t");
+  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  //UART setup
+  mySerial.begin(9600, SERIAL_8N1, RXD2, TXD2); 
+  Serial.println("ESP32 UART Reciever");
+
+  WiFi.mode(WIFI_STA);
+
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  esp_now_register_send_cb(OnDataSent);
+
+  //Register peer
+  memset(&peerInfo, 0, sizeof(peerInfo));
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
+
+  //Add peer
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("Failed to add peer");
+    return;
+  }
+
+}
+
+void loop() {
+
+  //Sjekker om data er tilgjengelig for å lese
+  if (mySerial.available()) {
+    recievedMessage = mySerial.readStringUntil('\n');
+    Serial.println("Recieved: " + recievedMessage);
+
+    StaticJsonDocument<256> doc;
+
+    DeserializationError error = deserializeJson(doc, recievedMessage);
+
+    if (error) {
+      Serial.print("JSON parse error: ");
+      Serial.println(error.c_str());
+      return;
+    }
+
+    strncpy(myData.ticketID, doc["ticketID"], sizeof(myData.ticketID));
+    myData.amountCustomers = doc["amountCustomers"];
+    strncpy(myData.customerName, doc["customerName"], sizeof(myData.customerName));
+    strncpy(myData.sessionKey, doc["sessionKey"], sizeof(myData.sessionKey));
+
+    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
+
+    if (result == ESP_OK){
+      Serial.println("Sending confirmed");
+    }
+    else {
+      Serial.println("Sending error");
+    }
+  }
+  
+}
