@@ -1,7 +1,7 @@
 #define TXD1 16
 #define RXD1 17
 
-// Use Serial1 for UART communication
+// Use Serial2 for UART communication
 HardwareSerial mySerial(2);
 
 void setup() {
