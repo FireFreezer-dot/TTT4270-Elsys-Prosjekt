@@ -10,6 +10,12 @@ import com.example.ticketscanner.databinding.ActivityMainBinding
 import android.R.bool
 import android.view.View
 
+//initialiserer globale verdier
+object Globalvariable {
+    lateinit var name: String
+    var amount: Int = 0
+    var canShowTicket: Boolean = false
+}
 class MainActivity : AppCompatActivity() {
 
     // ADD THIS LINE HERE (The "Introduction")
@@ -34,31 +40,33 @@ class MainActivity : AppCompatActivity() {
         binding.btnGetTicket.setOnClickListener {
 
             // 1 Initialisering av verdier
-            var name: String
-            var amount: Int
-            var canShowTicket : Boolean = false
+
             //Sjekker om begge inputfelt er fylt ut også gjør vi de om til riktig format
-            if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty()) {
-                name = binding.etTicketName.text.toString()
+            if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty())
+            {
+                Globalvariable.name = binding.etTicketName.text.toString()
                 //Henter innhold fra inputfelt og konverterer til en Int. Gir null hvis ikke en Int.
-                amount = binding.etTicketAmount.text.toString().toIntOrNull() ?: 0
-                if (amount < 0 && amount <= 12) {
-                    canShowTicket = true
+                Globalvariable.amount = binding.etTicketAmount.text.toString().toIntOrNull() ?: 0
+                Globalvariable.canShowTicket = false
+                if (Globalvariable.amount > 0 && Globalvariable.amount <= 12) {
+                    Globalvariable.canShowTicket = true
                 }
             }
 
             // 2 Sjekker tilstanden til programmet å går ut ifra det.
             // Viser ikke billet + gyldig tekst => hvis billet.
-            if(!ticketShown && canShowTicket) {
+            if(!ticketShown && Globalvariable.canShowTicket) {
 
-                val payload = OobPayloadBuilder().buildPayload() //henter OOB string
+                val payload = OobPayloadBuilder().buildPayload(Globalvariable.name, Globalvariable.amount) //henter OOB string
                 val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
+                val sessionKey = OobPayloadBuilder().lastSessionKey //lagrer sessionkey i app
                 binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
 
                 //Endrer eller skjuler knapp tekst / tekstfelt.
                 binding.btnGetTicket.text = "HIDE TICKET"
                 binding.etTicketAmount.visibility = View.GONE
                 binding.etTicketName.visibility = View.GONE
+                ticketShown = true
             }
             else {
                 binding.ivQRCode.setImageResource(0)
@@ -68,8 +76,9 @@ class MainActivity : AppCompatActivity() {
                 //Fjerner teksten fra disse inputfeltene.
                 binding.etTicketName.text.clear()
                 binding.etTicketAmount.text.clear()
+                ticketShown = false
             }
-            ticketShown = !ticketShown
+            //ticketShown = !ticketShown
         }
 //        val btnGetTicket = findViewById<Button>(R.id.btnGetTicket)
 //        btnGetTicket.setOnClickListener {
