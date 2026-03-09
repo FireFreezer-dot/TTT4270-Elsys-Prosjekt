@@ -1,12 +1,16 @@
-#define TXD1 16
-#define RXD1 17
+#include <HardwareSerial.h>
+
+#define TXD2 16
+#define RXD2 17
+
+String receivedMessage = ""; 
 
 // Use Serial2 for UART communication
 HardwareSerial mySerial(2);
 
 void setup() {
   Serial.begin(115200);
-  mySerial.begin(9600, SERIAL_8N1, RXD1, TXD1);  // UART setup
+  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2);  // UART setup
   
   Serial.println("ESP32 UART Receiver");
 }
@@ -15,7 +19,7 @@ void loop() {
   // Check if data is available to read
   if (mySerial.available()) {
     // Read data and display it
-    String message = mySerial.readStringUntil('*');
+    String message = mySerial.readStringUntil('\n');
     Serial.println("Received: " + message);
   }
 }
