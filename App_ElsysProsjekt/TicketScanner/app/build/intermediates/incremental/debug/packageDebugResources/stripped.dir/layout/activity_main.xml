@@ -19,6 +19,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/btnDeleteTicket"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="DELETE TICKET"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/btnGetTicket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+         />
+
     <ImageView
         android:id="@+id/ivQRCode"
         android:layout_width="320dp"
@@ -32,7 +46,7 @@
     <EditText
         android:id="@+id/etTicketAmount"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="Passager Amount"
@@ -40,12 +54,13 @@
         app:layout_constraintBottom_toTopOf="@+id/btnGetTicket"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/etTicketName" />
+        app:layout_constraintStart_toEndOf="@id/etTicketName" />
+
 
     <EditText
         android:id="@+id/etTicketName"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="Name"

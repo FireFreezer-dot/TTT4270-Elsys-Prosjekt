@@ -29,13 +29,20 @@ class MainActivity : AppCompatActivity() {
 
         // 3. Use binding.root to show the screen
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
         var ticketShown : Boolean = false
+
+        binding.btnDeleteTicket.setOnClickListener {
+            binding.btnDeleteTicket.visibility = View.GONE
+            binding.etTicketAmount.visibility = View.VISIBLE
+            binding.etTicketName.visibility = View.VISIBLE
+            Globalvariable.canShowTicket = false
+        }
 
         binding.btnGetTicket.setOnClickListener {
 
@@ -66,16 +73,26 @@ class MainActivity : AppCompatActivity() {
                 binding.btnGetTicket.text = "HIDE TICKET"
                 binding.etTicketAmount.visibility = View.GONE
                 binding.etTicketName.visibility = View.GONE
+                binding.btnDeleteTicket.visibility = View.GONE
+
                 ticketShown = true
             }
             else {
+                if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty() && ticketShown){
+                    binding.btnDeleteTicket.visibility = View.VISIBLE
+                    binding.etTicketAmount.visibility = View.GONE
+                    binding.etTicketName.visibility = View.GONE
+                    binding.btnGetTicket.text = "SHOW TICKET"
+                }
+                else {
+                    binding.btnGetTicket.setText(R.string.get_ticket)
+                    binding.etTicketAmount.visibility = View.VISIBLE
+                    binding.etTicketName.visibility = View.VISIBLE
+                    binding.etTicketName.text.clear()
+                    binding.etTicketAmount.text.clear()
+                }
                 binding.ivQRCode.setImageResource(0)
-                binding.btnGetTicket.setText(R.string.get_ticket)
-                binding.etTicketAmount.visibility = View.VISIBLE
-                binding.etTicketName.visibility = View.VISIBLE
-                //Fjerner teksten fra disse inputfeltene.
-                binding.etTicketName.text.clear()
-                binding.etTicketAmount.text.clear()
+
                 ticketShown = false
             }
             //ticketShown = !ticketShown
