@@ -1,0 +1,28 @@
+#include <HardwareSerial.h>
+
+#define TXD2 16
+#define RXD2 17
+
+String receivedMessage = ""; 
+
+HardwareSerial mySerial(2);
+
+void setup() {
+    Serial.begin(115200);
+    mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
+
+    Serial.println("ESP32 UART nr 1");
+}
+
+void loop() {
+  // Sjekker om vi har data for lesing
+    if (mySerial.available()) {
+        // Leser data og viser det
+        String message = mySerial.readStringUntil('\n');
+        Serial.println("Received: " + message);
+    }
+
+
+    // Denne sender en melding
+    mySerial.println("Hello from ESP32 UART nr 1");
+}
