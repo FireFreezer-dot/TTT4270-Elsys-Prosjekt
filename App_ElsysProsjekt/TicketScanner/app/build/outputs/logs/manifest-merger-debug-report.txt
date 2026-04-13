@@ -72,6 +72,18 @@ uses-permission#android.permission.BLUETOOTH_SCAN
 ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:5-72
 	android:name
 		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:6:22-70
+uses-permission#android.permission.BLUETOOTH
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:10:5-67
+	android:name
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:10:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:11:5-73
+	android:name
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:11:22-71
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:12:5-80
+	android:name
+		ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:12:22-78
 application
 ADDED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:5-33:19
 INJECTED from C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\AndroidManifest.xml:15:5-33:19
