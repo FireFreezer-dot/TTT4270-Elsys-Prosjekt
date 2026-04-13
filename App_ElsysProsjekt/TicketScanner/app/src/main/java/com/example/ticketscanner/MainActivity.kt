@@ -42,6 +42,8 @@ class MainActivity : AppCompatActivity() {
             binding.etTicketAmount.visibility = View.VISIBLE
             binding.etTicketName.visibility = View.VISIBLE
             Globalvariable.canShowTicket = false
+            binding.etTicketAmount.text.clear()
+            binding.etTicketName.text.clear()
         }
 
         binding.btnGetTicket.setOnClickListener {
