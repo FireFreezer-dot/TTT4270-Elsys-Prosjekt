@@ -3,7 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <string name="app_name">TicketScanner</string>
-    <string name="get_ticket">GET TICKET</string>
     <style name="Base.Theme.TicketScanner" parent="Theme.Material3.DayNight.NoActionBar">
         
         

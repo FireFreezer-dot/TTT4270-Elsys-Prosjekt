@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.ticketscanner.app-mergeDebugResources-1:/values-ldrtl-v17/values-ldrtl-v17.xml",
+            "outputFile": "com.example.ticketscanner.app-mergeDebugResources-32:/values-ldrtl-v17/values-ldrtl-v17.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\flofr\\.gradle\\caches\\9.1.0\\transforms\\fdbd5210e97cf78cd93879dd5a25736d\\workspace\\transformed\\material-1.10.0\\res\\values-ldrtl-v17\\values-ldrtl-v17.xml",
+                    "source": "C:\\Users\\stian\\.gradle\\caches\\9.1.0\\transforms\\fdbd5210e97cf78cd93879dd5a25736d\\workspace\\transformed\\material-1.10.0\\res\\values-ldrtl-v17\\values-ldrtl-v17.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

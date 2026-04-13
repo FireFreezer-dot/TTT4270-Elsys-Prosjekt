@@ -44,6 +44,9 @@ class MainActivity : AppCompatActivity() {
     //Advertise from android to esp32
     private fun advertise(sessionKey: String?) {
 
+        //sjekk på at funksjonen kjører
+        Log.d("BLE", "advertise() called with key: $sessionKey")
+
         val advertiser = getAdvertiser() ?: return
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
@@ -74,16 +77,36 @@ class MainActivity : AppCompatActivity() {
             .addServiceUuid( parcelSessionKey )
             .build()
 
+
         val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
             override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
                 super.onStartSuccess(settingsInEffect)
+                Log.d("BLE", "Advertising started successfully!")  // ← legg til
             }
 
             override fun onStartFailure(errorCode: Int) {
-                Log.e("BLE", "Advertising onStartFailure: " + errorCode)
+                val reason = when(errorCode) {
+                    ADVERTISE_FAILED_DATA_TOO_LARGE -> "DATA TOO LARGE"
+                    ADVERTISE_FAILED_TOO_MANY_ADVERTISERS -> "TOO MANY ADVERTISERS"
+                    ADVERTISE_FAILED_ALREADY_STARTED -> "ALREADY STARTED"
+                    ADVERTISE_FAILED_INTERNAL_ERROR -> "INTERNAL ERROR"
+                    else -> "UNKNOWN: $errorCode"
+                }
+                Log.e("BLE", "Advertising failed: $reason")  // ← erstatt gammel linje
                 super.onStartFailure(errorCode)
             }
         }
+
+//        val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
+//            override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
+//                super.onStartSuccess(settingsInEffect)
+//            }
+//
+//            override fun onStartFailure(errorCode: Int) {
+//                Log.e("BLE", "Advertising onStartFailure: " + errorCode)
+//                super.onStartFailure(errorCode)
+//            }
+//        }
         currentCallback = advertisingCallback
         advertiser.startAdvertising(settings, data, advertisingCallback)
     }
@@ -149,9 +172,10 @@ class MainActivity : AppCompatActivity() {
             // Viser ikke billet + gyldig tekst => hvis billet.
             if(!ticketShown && Globalvariable.canShowTicket) {
 
-                val payload = OobPayloadBuilder().buildPayload(Globalvariable.name, Globalvariable.amount) //henter OOB string
+                val builder = OobPayloadBuilder() //kjører bare funksjonen en gang
+                val payload = builder.buildPayload(Globalvariable.name, Globalvariable.amount) //henter OOB string
                 val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
-                val sessionKey = OobPayloadBuilder().lastSessionKey //lagrer sessionkey i app
+                val sessionKey = builder.lastSessionKey //lagrer sessionkey i app
                 binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
 
                 //Endrer eller skjuler knapp tekst / tekstfelt.
