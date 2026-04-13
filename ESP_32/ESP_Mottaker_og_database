@@ -8,6 +8,8 @@
 #define TXD2 16
 #define RXD2 17
 
+HardwareSerial mySerial(2);
+ 
 String sessionKey = "";
 
 // --- Database ---
@@ -186,11 +188,11 @@ void loop() {
     for (int i = 0; i < ticketCount; ++i) {
       if (mySerial.readStringUntil('\n') == tickets[i].sessionKey) {
         ticketNow -= tickets[i].amountCustomers;
-        for (int j = index; j<ticketCount-1;j++) {
+        for (int j = i; j<ticketCount-1;j++) {
         tickets[j] = tickets[j+1];
         }
         ticketCount--;
-        return 0;
+        return;
       }
     }
   }
