@@ -1,38 +1,38 @@
-com.example.ticketscanner.app-savedstate-1.2.1-0 C:\Users\stian\.gradle\caches\9.1.0\transforms\06862b3d86f871c3313edc362720b3e6\workspace\transformed\savedstate-1.2.1\res
-com.example.ticketscanner.app-annotation-experimental-1.4.1-1 C:\Users\stian\.gradle\caches\9.1.0\transforms\0c4800ba43a32a13c3d5796bc1da2d00\workspace\transformed\annotation-experimental-1.4.1\res
-com.example.ticketscanner.app-lifecycle-process-2.6.2-2 C:\Users\stian\.gradle\caches\9.1.0\transforms\14a2fc0dc52cc8a5aab37dd46dac86d7\workspace\transformed\lifecycle-process-2.6.2\res
-com.example.ticketscanner.app-recyclerview-1.1.0-3 C:\Users\stian\.gradle\caches\9.1.0\transforms\1b2e09439ae27b5810f58d5a58203803\workspace\transformed\recyclerview-1.1.0\res
-com.example.ticketscanner.app-lifecycle-runtime-2.6.2-4 C:\Users\stian\.gradle\caches\9.1.0\transforms\1f156ba201722e5977439479aac84c8f\workspace\transformed\lifecycle-runtime-2.6.2\res
-com.example.ticketscanner.app-lifecycle-viewmodel-savedstate-2.6.2-5 C:\Users\stian\.gradle\caches\9.1.0\transforms\3648cbc300236a2b16cbf575a3fa4a95\workspace\transformed\lifecycle-viewmodel-savedstate-2.6.2\res
-com.example.ticketscanner.app-profileinstaller-1.4.0-6 C:\Users\stian\.gradle\caches\9.1.0\transforms\4501462a7208927c3994967ac20d4454\workspace\transformed\profileinstaller-1.4.0\res
-com.example.ticketscanner.app-fragment-1.3.6-7 C:\Users\stian\.gradle\caches\9.1.0\transforms\5f5ab54f1948b4203340f2c36436e8c7\workspace\transformed\fragment-1.3.6\res
-com.example.ticketscanner.app-appcompat-resources-1.6.1-8 C:\Users\stian\.gradle\caches\9.1.0\transforms\68515bd74ec5b2295e3230bdb6656e3c\workspace\transformed\appcompat-resources-1.6.1\res
-com.example.ticketscanner.app-activity-1.12.3-9 C:\Users\stian\.gradle\caches\9.1.0\transforms\6b3bd34ff289aa665baea8c8d752c92d\workspace\transformed\activity-1.12.3\res
-com.example.ticketscanner.app-startup-runtime-1.1.1-10 C:\Users\stian\.gradle\caches\9.1.0\transforms\724e96bac5846d8e6de176b7326a804e\workspace\transformed\startup-runtime-1.1.1\res
-com.example.ticketscanner.app-emoji2-1.2.0-11 C:\Users\stian\.gradle\caches\9.1.0\transforms\9073cad9b8348079e46d42f539defcb3\workspace\transformed\emoji2-1.2.0\res
-com.example.ticketscanner.app-lifecycle-viewmodel-2.6.2-12 C:\Users\stian\.gradle\caches\9.1.0\transforms\9a8c720efc15f2ca80b9e7a907e98bc8\workspace\transformed\lifecycle-viewmodel-2.6.2\res
-com.example.ticketscanner.app-core-1.17.0-13 C:\Users\stian\.gradle\caches\9.1.0\transforms\a2ab3c048dc55c2017a8053558a2dd96\workspace\transformed\core-1.17.0\res
-com.example.ticketscanner.app-coordinatorlayout-1.1.0-14 C:\Users\stian\.gradle\caches\9.1.0\transforms\a76ccc9462104cb991aba7d88d0a814c\workspace\transformed\coordinatorlayout-1.1.0\res
-com.example.ticketscanner.app-core-runtime-2.2.0-15 C:\Users\stian\.gradle\caches\9.1.0\transforms\ae4c4068ad0cc19123850933233ce5d5\workspace\transformed\core-runtime-2.2.0\res
-com.example.ticketscanner.app-lifecycle-livedata-2.6.2-16 C:\Users\stian\.gradle\caches\9.1.0\transforms\b231fbbf200d561ac7b0411dc5ca99cf\workspace\transformed\lifecycle-livedata-2.6.2\res
-com.example.ticketscanner.app-tracing-1.2.0-17 C:\Users\stian\.gradle\caches\9.1.0\transforms\bdef9ffdc43d1df59eeefc25f064b2f9\workspace\transformed\tracing-1.2.0\res
-com.example.ticketscanner.app-constraintlayout-2.1.4-18 C:\Users\stian\.gradle\caches\9.1.0\transforms\c131c3c09282a5d36aeb54241d98e053\workspace\transformed\constraintlayout-2.1.4\res
-com.example.ticketscanner.app-navigationevent-19 C:\Users\stian\.gradle\caches\9.1.0\transforms\c234c7d91bfa0e2e2685075818490b45\workspace\transformed\navigationevent\res
-com.example.ticketscanner.app-appcompat-1.6.1-20 C:\Users\stian\.gradle\caches\9.1.0\transforms\c84dc4a455616641f9e0aed2340d3d03\workspace\transformed\appcompat-1.6.1\res
-com.example.ticketscanner.app-drawerlayout-1.1.1-21 C:\Users\stian\.gradle\caches\9.1.0\transforms\cca0ba641433b0b188a58cc2b5a1a6a1\workspace\transformed\drawerlayout-1.1.1\res
-com.example.ticketscanner.app-viewpager2-1.0.0-22 C:\Users\stian\.gradle\caches\9.1.0\transforms\d2abbbddb0d4e442dc453c5009499434\workspace\transformed\viewpager2-1.0.0\res
-com.example.ticketscanner.app-core-ktx-1.17.0-23 C:\Users\stian\.gradle\caches\9.1.0\transforms\d738faaf7550bc3c21c23bd5d8dd3d08\workspace\transformed\core-ktx-1.17.0\res
-com.example.ticketscanner.app-transition-1.2.0-24 C:\Users\stian\.gradle\caches\9.1.0\transforms\e0722da62a6ab8098b9fdb8be765c830\workspace\transformed\transition-1.2.0\res
-com.example.ticketscanner.app-core-viewtree-1.0.0-25 C:\Users\stian\.gradle\caches\9.1.0\transforms\e3fda9cf1d26afefdfff5d6da8980690\workspace\transformed\core-viewtree-1.0.0\res
-com.example.ticketscanner.app-lifecycle-livedata-core-2.6.2-26 C:\Users\stian\.gradle\caches\9.1.0\transforms\e674026e87ff6a827ed82dfa3fa2f0c5\workspace\transformed\lifecycle-livedata-core-2.6.2\res
-com.example.ticketscanner.app-cardview-1.0.0-27 C:\Users\stian\.gradle\caches\9.1.0\transforms\e7e28c00d39dfca597de2b7bcaea64be\workspace\transformed\cardview-1.0.0\res
-com.example.ticketscanner.app-emoji2-views-helper-1.2.0-28 C:\Users\stian\.gradle\caches\9.1.0\transforms\f1569f2437d77ec9c7aa4e0b117b1a30\workspace\transformed\emoji2-views-helper-1.2.0\res
-com.example.ticketscanner.app-zxing-android-embedded-4.3.0-29 C:\Users\stian\.gradle\caches\9.1.0\transforms\f4428f77e1ba009b84d7321383f15f80\workspace\transformed\zxing-android-embedded-4.3.0\res
-com.example.ticketscanner.app-material-1.10.0-30 C:\Users\stian\.gradle\caches\9.1.0\transforms\fdbd5210e97cf78cd93879dd5a25736d\workspace\transformed\material-1.10.0\res
-com.example.ticketscanner.app-pngs-31 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\generated\res\pngs\debug
-com.example.ticketscanner.app-updated_navigation_xml-32 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\generated\updated_navigation_xml\debug
-com.example.ticketscanner.app-packageDebugResources-33 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.example.ticketscanner.app-packageDebugResources-34 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.example.ticketscanner.app-debug-35 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\intermediates\merged_res\debug\mergeDebugResources
-com.example.ticketscanner.app-debug-36 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\debug\res
-com.example.ticketscanner.app-main-37 C:\Users\stian\StudioProjects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\res
+com.example.ticketscanner.app-pngs-0 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\generated\res\pngs\debug
+com.example.ticketscanner.app-updated_navigation_xml-1 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\generated\updated_navigation_xml\debug
+com.example.ticketscanner.app-packageDebugResources-2 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.ticketscanner.app-packageDebugResources-3 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.ticketscanner.app-debug-4 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.example.ticketscanner.app-debug-5 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\debug\res
+com.example.ticketscanner.app-main-6 C:\Personal Projects\TTT4270-Elsys-Prosjekt\App_ElsysProsjekt\TicketScanner\app\src\main\res
+com.example.ticketscanner.app-savedstate-1.2.1-7 C:\Users\flofr\.gradle\caches\9.1.0\transforms\06862b3d86f871c3313edc362720b3e6\workspace\transformed\savedstate-1.2.1\res
+com.example.ticketscanner.app-annotation-experimental-1.4.1-8 C:\Users\flofr\.gradle\caches\9.1.0\transforms\0c4800ba43a32a13c3d5796bc1da2d00\workspace\transformed\annotation-experimental-1.4.1\res
+com.example.ticketscanner.app-lifecycle-process-2.6.2-9 C:\Users\flofr\.gradle\caches\9.1.0\transforms\14a2fc0dc52cc8a5aab37dd46dac86d7\workspace\transformed\lifecycle-process-2.6.2\res
+com.example.ticketscanner.app-recyclerview-1.1.0-10 C:\Users\flofr\.gradle\caches\9.1.0\transforms\1b2e09439ae27b5810f58d5a58203803\workspace\transformed\recyclerview-1.1.0\res
+com.example.ticketscanner.app-lifecycle-runtime-2.6.2-11 C:\Users\flofr\.gradle\caches\9.1.0\transforms\1f156ba201722e5977439479aac84c8f\workspace\transformed\lifecycle-runtime-2.6.2\res
+com.example.ticketscanner.app-lifecycle-viewmodel-savedstate-2.6.2-12 C:\Users\flofr\.gradle\caches\9.1.0\transforms\3648cbc300236a2b16cbf575a3fa4a95\workspace\transformed\lifecycle-viewmodel-savedstate-2.6.2\res
+com.example.ticketscanner.app-profileinstaller-1.4.0-13 C:\Users\flofr\.gradle\caches\9.1.0\transforms\4501462a7208927c3994967ac20d4454\workspace\transformed\profileinstaller-1.4.0\res
+com.example.ticketscanner.app-fragment-1.3.6-14 C:\Users\flofr\.gradle\caches\9.1.0\transforms\5f5ab54f1948b4203340f2c36436e8c7\workspace\transformed\fragment-1.3.6\res
+com.example.ticketscanner.app-appcompat-resources-1.6.1-15 C:\Users\flofr\.gradle\caches\9.1.0\transforms\68515bd74ec5b2295e3230bdb6656e3c\workspace\transformed\appcompat-resources-1.6.1\res
+com.example.ticketscanner.app-activity-1.12.3-16 C:\Users\flofr\.gradle\caches\9.1.0\transforms\6b3bd34ff289aa665baea8c8d752c92d\workspace\transformed\activity-1.12.3\res
+com.example.ticketscanner.app-startup-runtime-1.1.1-17 C:\Users\flofr\.gradle\caches\9.1.0\transforms\724e96bac5846d8e6de176b7326a804e\workspace\transformed\startup-runtime-1.1.1\res
+com.example.ticketscanner.app-emoji2-1.2.0-18 C:\Users\flofr\.gradle\caches\9.1.0\transforms\9073cad9b8348079e46d42f539defcb3\workspace\transformed\emoji2-1.2.0\res
+com.example.ticketscanner.app-lifecycle-viewmodel-2.6.2-19 C:\Users\flofr\.gradle\caches\9.1.0\transforms\9a8c720efc15f2ca80b9e7a907e98bc8\workspace\transformed\lifecycle-viewmodel-2.6.2\res
+com.example.ticketscanner.app-core-1.17.0-20 C:\Users\flofr\.gradle\caches\9.1.0\transforms\a2ab3c048dc55c2017a8053558a2dd96\workspace\transformed\core-1.17.0\res
+com.example.ticketscanner.app-coordinatorlayout-1.1.0-21 C:\Users\flofr\.gradle\caches\9.1.0\transforms\a76ccc9462104cb991aba7d88d0a814c\workspace\transformed\coordinatorlayout-1.1.0\res
+com.example.ticketscanner.app-core-runtime-2.2.0-22 C:\Users\flofr\.gradle\caches\9.1.0\transforms\ae4c4068ad0cc19123850933233ce5d5\workspace\transformed\core-runtime-2.2.0\res
+com.example.ticketscanner.app-lifecycle-livedata-2.6.2-23 C:\Users\flofr\.gradle\caches\9.1.0\transforms\b231fbbf200d561ac7b0411dc5ca99cf\workspace\transformed\lifecycle-livedata-2.6.2\res
+com.example.ticketscanner.app-tracing-1.2.0-24 C:\Users\flofr\.gradle\caches\9.1.0\transforms\bdef9ffdc43d1df59eeefc25f064b2f9\workspace\transformed\tracing-1.2.0\res
+com.example.ticketscanner.app-constraintlayout-2.1.4-25 C:\Users\flofr\.gradle\caches\9.1.0\transforms\c131c3c09282a5d36aeb54241d98e053\workspace\transformed\constraintlayout-2.1.4\res
+com.example.ticketscanner.app-navigationevent-26 C:\Users\flofr\.gradle\caches\9.1.0\transforms\c234c7d91bfa0e2e2685075818490b45\workspace\transformed\navigationevent\res
+com.example.ticketscanner.app-appcompat-1.6.1-27 C:\Users\flofr\.gradle\caches\9.1.0\transforms\c84dc4a455616641f9e0aed2340d3d03\workspace\transformed\appcompat-1.6.1\res
+com.example.ticketscanner.app-drawerlayout-1.1.1-28 C:\Users\flofr\.gradle\caches\9.1.0\transforms\cca0ba641433b0b188a58cc2b5a1a6a1\workspace\transformed\drawerlayout-1.1.1\res
+com.example.ticketscanner.app-viewpager2-1.0.0-29 C:\Users\flofr\.gradle\caches\9.1.0\transforms\d2abbbddb0d4e442dc453c5009499434\workspace\transformed\viewpager2-1.0.0\res
+com.example.ticketscanner.app-core-ktx-1.17.0-30 C:\Users\flofr\.gradle\caches\9.1.0\transforms\d738faaf7550bc3c21c23bd5d8dd3d08\workspace\transformed\core-ktx-1.17.0\res
+com.example.ticketscanner.app-transition-1.2.0-31 C:\Users\flofr\.gradle\caches\9.1.0\transforms\e0722da62a6ab8098b9fdb8be765c830\workspace\transformed\transition-1.2.0\res
+com.example.ticketscanner.app-core-viewtree-1.0.0-32 C:\Users\flofr\.gradle\caches\9.1.0\transforms\e3fda9cf1d26afefdfff5d6da8980690\workspace\transformed\core-viewtree-1.0.0\res
+com.example.ticketscanner.app-lifecycle-livedata-core-2.6.2-33 C:\Users\flofr\.gradle\caches\9.1.0\transforms\e674026e87ff6a827ed82dfa3fa2f0c5\workspace\transformed\lifecycle-livedata-core-2.6.2\res
+com.example.ticketscanner.app-cardview-1.0.0-34 C:\Users\flofr\.gradle\caches\9.1.0\transforms\e7e28c00d39dfca597de2b7bcaea64be\workspace\transformed\cardview-1.0.0\res
+com.example.ticketscanner.app-emoji2-views-helper-1.2.0-35 C:\Users\flofr\.gradle\caches\9.1.0\transforms\f1569f2437d77ec9c7aa4e0b117b1a30\workspace\transformed\emoji2-views-helper-1.2.0\res
+com.example.ticketscanner.app-zxing-android-embedded-4.3.0-36 C:\Users\flofr\.gradle\caches\9.1.0\transforms\f4428f77e1ba009b84d7321383f15f80\workspace\transformed\zxing-android-embedded-4.3.0\res
+com.example.ticketscanner.app-material-1.10.0-37 C:\Users\flofr\.gradle\caches\9.1.0\transforms\fdbd5210e97cf78cd93879dd5a25736d\workspace\transformed\material-1.10.0\res

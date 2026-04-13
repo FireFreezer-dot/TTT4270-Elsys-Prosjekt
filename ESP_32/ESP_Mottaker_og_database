@@ -1,0 +1,199 @@
+#include "esp_now.h"
+#include "WiFi.h"
+#include "WebServer.h"
+#include <string.h>
+#include <HardwareSerial.h>
+
+// --- UART ---
+#define TXD2 16
+#define RXD2 17
+
+HardwareSerial mySerial(2);
+ 
+String sessionKey = "";
+
+// --- Database ---
+#define MAX_TICKETS 100
+
+
+const char* ssid = "Mats Tobiasson sin iPhone";
+const char* password = "27042004";
+
+WebServer server(80);
+
+typedef struct struct_message {
+  char ticketID[32];
+  int amountCustomers;
+  char customerName[32];
+  char sessionKey[40];  
+} struct_message;
+
+struct_message tickets[MAX_TICKETS];
+
+int ticketCount = 0;
+int ticketEver = 0;
+int ticketNow = 0;
+
+int findTicket(const char* id) {
+  for (int i=0; i<ticketCount; i++) {
+    if (strcmp(tickets[i].sessionKey,id)==0){
+      return i;
+    }
+  }
+  return -1;
+}
+
+void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
+  struct_message newTicket;
+
+  memcpy(&newTicket, incomingData, sizeof(newTicket));
+
+  Serial.println("Ticket ID: ");
+  Serial.println(newTicket.ticketID);
+  
+  int index = findTicket(newTicket.sessionKey);
+
+  if (index >= 0) {
+    Serial.println("Billett finnes allerede. Blir nå fjernet.");
+    ticketNow -= newTicket.amountCustomers;
+    for (int i = index; i<ticketCount-1;i++) {
+      tickets[i] = tickets[i+1];
+    }
+    ticketCount--;
+
+  }
+  else {
+    if (ticketCount < MAX_TICKETS) {
+      tickets[ticketCount] = newTicket;
+      ticketCount++;
+      ticketEver += newTicket.amountCustomers;
+      ticketNow += newTicket.amountCustomers;
+
+      Serial.println("Billett lagt til.");
+
+      mySerial.println(newTicket.sessionKey); // Send session key over UART
+    }
+  }
+}
+
+void handleRoot(){
+
+  String html = "<!DOCTYPE html><html>";
+
+  html += "<head>";
+  html += "<title>Boat Passenger Database</title>";
+  html += "<meta http-equiv='refresh' content='2'>";
+  html += "</head>";
+
+  html += "<body style='font-family:Arial'>";
+
+  html += "<h1>Passenger Database</h1>";
+
+  html += "<table border='1' style='border-collapse:collapse'>";
+
+  html += "<tr>";
+  html += "<th>Ticket ID</th>";
+  html += "<th>Name</th>";
+  html += "<th>Passengers</th>";
+  html += "</tr>";
+
+  for(int i=0;i<ticketCount;i++){
+
+    html += "<tr>";
+
+    html += "<td>";
+    html += tickets[i].ticketID;
+    html += "</td>";
+
+    html += "<td>";
+    html += tickets[i].customerName;
+    html += "</td>";
+
+    html += "<td>";
+    html += String(tickets[i].amountCustomers);
+    html += "</td>";
+
+    html += "</tr>";
+
+  }
+
+  html += "</table>";
+
+  html += "<h2>Total passengers now: ";
+  html += String(ticketNow);
+  html += "</h2>";
+
+  html += "<h2>Total passengers ever: ";
+  html += String(ticketEver);
+  html += "</h2>";
+
+  html += "</body></html>";
+
+  server.send(200,"text/html",html);
+
+}
+
+void setup() {
+  Serial.begin(115200);
+
+  // --- UART setup ---
+  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2);  // UART setup
+  
+  Serial.println("ESP32 UART Database");
+
+  //Wifi-modus for å ta i mot ESP-NOW
+  WiFi.mode(WIFI_STA);
+
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  esp_now_register_recv_cb(OnDataRecv);
+
+  //Kobler til nett
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+
+  //Printer så lenge internett ikke er koblet til
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(2000);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  
+  Serial.print("WiFi channel: ");
+  Serial.println(WiFi.channel());
+  
+  Serial.print("IP address: ");
+  //Print the IP address
+  Serial.println(WiFi.localIP());
+
+  server.on("/", handleRoot);
+  //Start the server
+  server.begin();
+
+  Serial.println("Web server started");
+
+
+}
+
+void loop() {
+  server.handleClient();
+
+  if (mySerial.available()) {
+    for (int i = 0; i < ticketCount; ++i) {
+      if (mySerial.readStringUntil('\n') == tickets[i].sessionKey) {
+        ticketNow -= tickets[i].amountCustomers;
+        for (int j = i; j<ticketCount-1;j++) {
+        tickets[j] = tickets[j+1];
+        }
+        ticketCount--;
+        return;
+      }
+    }
+  }
+}

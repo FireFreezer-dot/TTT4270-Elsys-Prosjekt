@@ -1,0 +1,227 @@
+#include <BLEDevice.h>
+#include <BLEUtils.h>
+#include <BLEScan.h>
+#include <cmath>
+#include <map>
+#include <vector>
+#include <numeric>
+#include "esp_now.h"
+#include "WiFi.h"
+#include "WebServer.h"
+
+// --- BLE KONFIGURASJON ---
+const std::vector<String> TARGET_NAMES = {"iPhone", "Galaxy S24", "MacBook"};
+const int MEASURED_POWER = -51;
+const float N = 2.0;
+const float scanTime = 1;
+const int MAX_SAMPLES = 5;
+
+BLEScan* pBLEScan;
+std::map<String, std::vector<int>> rssiHistory;
+
+// --- ESP-NOW / WEBSERVER KONFIGURASJON ---
+#define MAX_TICKETS 100
+const char* ssid = "Oliver sin iPhone";
+const char* password = "27042004";
+
+WebServer server(80);
+
+typedef struct struct_message {
+  char ticketID[32];
+  int amountCustomers;
+  char customerName[32];
+  char sessionKey[40];
+} struct_message;
+
+struct_message tickets[MAX_TICKETS];
+int ticketCount = 0;
+int ticketEver = 0;
+int ticketNow = 0;
+
+// --- BLE FUNKSJONER ---
+float calculateDistance(float avgRssi) {
+  if (avgRssi == 0) return -1.0;
+  return pow(10, (float)(MEASURED_POWER - avgRssi) / (10 * N));
+}
+
+float getAverageRssi(const String& name) {
+  auto& history = rssiHistory[name];
+  if (history.empty()) return 0;
+  float sum = std::accumulate(history.begin(), history.end(), 0);
+  return sum / history.size();
+}
+
+bool isTargetDevice(const String& name) {
+  for (const auto& target : TARGET_NAMES) {
+    if (name == target) return true;
+  }
+  return false;
+}
+
+class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
+  void onResult(BLEAdvertisedDevice advertisedDevice) {
+    if (!advertisedDevice.haveName()) return;
+    String name = String(advertisedDevice.getName().c_str());
+    if (!isTargetDevice(name)) return;
+
+    int rssi = advertisedDevice.getRSSI();
+    auto& history = rssiHistory[name];
+    history.push_back(rssi);
+    if ((int)history.size() > MAX_SAMPLES) {
+      history.erase(history.begin());
+    }
+
+    float avgRssi = getAverageRssi(name);
+    float distance = calculateDistance(avgRssi);
+    int sampleCount = history.size();
+
+    Serial.println("-----------------------");
+    Serial.printf("Enhet:              %s\n", name.c_str());
+    Serial.printf("Siste RSSI:         %d dBm\n", rssi);
+    Serial.printf("Gjennomsnitt RSSI:  %.1f dBm (%d/%d målinger)\n", avgRssi, sampleCount, MAX_SAMPLES);
+    Serial.printf("Estimert avstand:   %.2f meter\n", distance);
+  }
+};
+
+// --- ESP-NOW FUNKSJONER ---
+int findTicket(const char* id) {
+  for (int i = 0; i < ticketCount; i++) {
+    if (strcmp(tickets[i].ticketID, id) == 0) return i;
+  }
+  return -1;
+}
+
+void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
+  struct_message newTicket;
+  memcpy(&newTicket, incomingData, sizeof(newTicket));
+  Serial.print("Ticket ID: ");
+  Serial.println(newTicket.ticketID);
+
+  int index = findTicket(newTicket.ticketID);
+  if (index >= 0) {
+    Serial.println("Billett finnes allerede. Blir nå fjernet.");
+    ticketNow -= newTicket.amountCustomers;
+    for (int i = index; i < ticketCount - 1; i++) {
+      tickets[i] = tickets[i + 1];
+    }
+    ticketCount--;
+  } else {
+    if (ticketCount < MAX_TICKETS) {
+      tickets[ticketCount] = newTicket;
+      ticketCount++;
+      ticketEver += newTicket.amountCustomers;
+      ticketNow += newTicket.amountCustomers;
+      Serial.println("Billett lagt til.");
+    }
+  }
+}
+
+// --- WEBSERVER ---
+void handleRoot() {
+  String html = "<!DOCTYPE html><html>";
+  html += "<head><title>Boat Passenger Database</title>";
+  html += "<meta http-equiv='refresh' content='2'></head>";
+  html += "<body style='font-family:Arial'>";
+  html += "<h1>Passenger Database</h1>";
+
+  // BLE-seksjon
+  html += "<h2>BLE Enheter i nærheten</h2>";
+  html += "<table border='1' style='border-collapse:collapse'>";
+  html += "<tr><th>Enhet</th><th>Gj.snitt RSSI</th><th>Estimert avstand</th></tr>";
+  for (const auto& name : TARGET_NAMES) {
+    if (rssiHistory.count(name) && !rssiHistory.at(name).empty()) {
+      float avgRssi = getAverageRssi(name);
+      float distance = calculateDistance(avgRssi);
+      html += "<tr><td>" + name + "</td>";
+      html += "<td>" + String(avgRssi, 1) + " dBm</td>";
+      html += "<td>" + String(distance, 2) + " m</td></tr>";
+    }
+  }
+  html += "</table>";
+
+  // Billett-seksjon
+  html += "<h2>Billetter</h2>";
+  html += "<table border='1' style='border-collapse:collapse'>";
+  html += "<tr><th>Ticket ID</th><th>Name</th><th>Passengers</th></tr>";
+  for (int i = 0; i < ticketCount; i++) {
+    html += "<tr><td>" + String(tickets[i].ticketID) + "</td>";
+    html += "<td>" + String(tickets[i].customerName) + "</td>";
+    html += "<td>" + String(tickets[i].amountCustomers) + "</td></tr>";
+  }
+  html += "</table>";
+  html += "<h2>Total passengers now: " + String(ticketNow) + "</h2>";
+  html += "<h2>Total passengers ever: " + String(ticketEver) + "</h2>";
+  html += "</body></html>";
+  server.send(200, "text/html", html);
+}
+
+// --- SETUP & LOOP ---
+void setup() {
+  Serial.begin(115200);
+
+  // WiFi kobles til først (ESP-NOW trenger WiFi-laget)
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.print("Kobler til WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi tilkoblet!");
+  Serial.print("IP-adresse: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("WiFi kanal: ");
+  Serial.println(WiFi.channel());
+
+  // ESP-NOW initialiseres etter WiFi
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Feil ved initialisering av ESP-NOW");
+    return;
+  }
+  esp_now_register_recv_cb(OnDataRecv);
+  Serial.println("ESP-NOW klar");
+
+  // BLE initialiseres
+  BLEDevice::init("");
+  pBLEScan = BLEDevice::getScan();
+  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+  pBLEScan->setActiveScan(true);
+  pBLEScan->setInterval(100);
+  pBLEScan->setWindow(99);
+  Serial.println("BLE-skanner klar");
+
+  // Webserver
+  server.on("/", handleRoot);
+  server.begin();
+  Serial.println("Webserver startet");
+}
+
+unsigned long lastBLEScan = 0;
+const unsigned long BLE_INTERVAL = 2000; // BLE-skann hvert 2. sekund
+
+void loop() {
+  server.handleClient();
+
+  // BLE-skanning kjøres ikke-blokkerende
+  if (millis() - lastBLEScan >= BLE_INTERVAL) {
+    lastBLEScan = millis();
+    Serial.println("\nSkanner etter BLE-mål...");
+    pBLEScan->start(scanTime, false);
+    pBLEScan->clearResults();
+
+    // Oppsummering
+    bool anyFound = false;
+    for (const auto& name : TARGET_NAMES) {
+      if (rssiHistory.count(name) && !rssiHistory[name].empty()) {
+        if (!anyFound) {
+          Serial.println("\n=== OPPSUMMERING ===");
+          anyFound = true;
+        }
+        float avgRssi = getAverageRssi(name);
+        float distance = calculateDistance(avgRssi);
+        Serial.printf("%-20s | RSSI: %6.1f dBm | Avstand: %.2f m\n",
+                      name.c_str(), avgRssi, distance);
+      }
+    }
+  }
+}

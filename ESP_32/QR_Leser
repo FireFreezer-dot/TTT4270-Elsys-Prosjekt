@@ -1,9 +1,16 @@
+/*********
+  Rui Santos & Sara Santos - Random Nerd Tutorials
+  Complete instructions at https://RandomNerdTutorials.com/esp32-uart-communication-serial-arduino/
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+*********/
+
 #include <HardwareSerial.h>
 
 #define TXD2 16
 #define RXD2 17
 
-String receivedMessage = ""; 
+String sessionKey = ""; 
 
 // Use Serial2 for UART communication
 HardwareSerial mySerial(2);
@@ -19,7 +26,9 @@ void loop() {
   // Check if data is available to read
   if (mySerial.available()) {
     // Read data and display it
-    String message = mySerial.readStringUntil('\n');
-    Serial.println("Received: " + message);
+    String sessionKey = mySerial.readStringUntil('\n');
+    Serial.println("Received: " + sessionKey);
   }
+
+  mySerial.println("Hello from ESP32!"); // Send data to the other device
 }

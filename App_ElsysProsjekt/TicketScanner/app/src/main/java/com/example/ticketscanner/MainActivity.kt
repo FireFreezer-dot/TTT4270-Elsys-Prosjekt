@@ -121,6 +121,15 @@ class MainActivity : AppCompatActivity() {
 
         var ticketShown : Boolean = false
 
+        binding.btnDeleteTicket.setOnClickListener {
+            binding.btnDeleteTicket.visibility = View.GONE
+            binding.etTicketAmount.visibility = View.VISIBLE
+            binding.etTicketName.visibility = View.VISIBLE
+            Globalvariable.canShowTicket = false
+            binding.etTicketAmount.text.clear()
+            binding.etTicketName.text.clear()
+        }
+
         binding.btnGetTicket.setOnClickListener {
 
             // 1 Initialisering av verdier
@@ -149,37 +158,32 @@ class MainActivity : AppCompatActivity() {
                 binding.btnGetTicket.text = "HIDE TICKET"
                 binding.etTicketAmount.visibility = View.GONE
                 binding.etTicketName.visibility = View.GONE
+                binding.btnDeleteTicket.visibility = View.GONE
+
                 ticketShown = true
 
-                //advertising (fjerner // når funksjonen er definert
-                //if( !BluetoothAdapter.getDefaultAdapter().isMultipleAdvertisementSupported() ) {
-                    //Toast.makeText( this, "Multiple advertisement not supported", Toast.LENGTH_SHORT ).show()
-                    //mAdvertiseButton.setEnabled( false );
-                    //mDiscoverButton.setEnabled( false );
-                //}
-                //else {
-                    //advertise(sessionKey)
-                //}
                 advertise(sessionKey)
             }
             else {
+                if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty() && ticketShown){
+                    binding.btnDeleteTicket.visibility = View.VISIBLE
+                    binding.etTicketAmount.visibility = View.GONE
+                    binding.etTicketName.visibility = View.GONE
+                    binding.btnGetTicket.text = "SHOW TICKET"
+                }
+                else {
+                    binding.btnGetTicket.text = "GET TICKET"
+                    binding.etTicketAmount.visibility = View.VISIBLE
+                    binding.etTicketName.visibility = View.VISIBLE
+                    binding.etTicketName.text.clear()
+                    binding.etTicketAmount.text.clear()
+                }
                 binding.ivQRCode.setImageResource(0)
-                binding.btnGetTicket.setText("GET TICKET")
-                binding.etTicketAmount.visibility = View.VISIBLE
-                binding.etTicketName.visibility = View.VISIBLE
-                //Fjerner teksten fra disse inputfeltene.
-                binding.etTicketName.text.clear()
-                binding.etTicketAmount.text.clear()
+
                 ticketShown = false
                 stopAdvertising()
             }
-            //ticketShown = !ticketShown
         }
-//        val btnGetTicket = findViewById<Button>(R.id.btnGetTicket)
-//        btnGetTicket.setOnClickListener {
-            //val firstName = etFirstName.text.toString()
-            //val lastName = etLastName.text.toString()
-            //Log.d("MainActivity", "$firstName $lastName")
     }
 }
 
