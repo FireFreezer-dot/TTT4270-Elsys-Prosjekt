@@ -1,7 +1,16 @@
 #include "esp_now.h"
 #include "WiFi.h"
 #include "WebServer.h"
+#include <string.h>
+#include <HardwareSerial.h>
 
+// --- UART ---
+#define TXD2 16
+#define RXD2 17
+
+String sessionKey = "";
+
+// --- Database ---
 #define MAX_TICKETS 100
 
 
@@ -59,6 +68,8 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
       ticketNow += newTicket.amountCustomers;
 
       Serial.println("Billett lagt til.");
+
+      mySerial.println(newTicket.sessionKey); // Send session key over UART
     }
   }
 }
@@ -123,6 +134,11 @@ void handleRoot(){
 void setup() {
   Serial.begin(115200);
 
+  // --- UART setup ---
+  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2);  // UART setup
+  
+  Serial.println("ESP32 UART Database");
+
   //Wifi-modus for å ta i mot ESP-NOW
   WiFi.mode(WIFI_STA);
 
@@ -165,7 +181,4 @@ void setup() {
 
 void loop() {
   server.handleClient();
-
-  
-  
 }
