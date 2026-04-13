@@ -18,13 +18,14 @@ typedef struct struct_message {
 } struct_message;
 
 struct_message tickets[MAX_TICKETS];
+
 int ticketCount = 0;
 int ticketEver = 0;
 int ticketNow = 0;
 
 int findTicket(const char* id) {
   for (int i=0; i<ticketCount; i++) {
-    if (strcmp(tickets[i].ticketID,id)==0){
+    if (strcmp(tickets[i].sessionKey,id)==0){
       return i;
     }
   }
@@ -39,7 +40,7 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
   Serial.println("Ticket ID: ");
   Serial.println(newTicket.ticketID);
   
-  int index = findTicket(newTicket.ticketID);
+  int index = findTicket(newTicket.sessionKey);
 
   if (index >= 0) {
     Serial.println("Billett finnes allerede. Blir nå fjernet.");
@@ -164,6 +165,7 @@ void setup() {
 
 void loop() {
   server.handleClient();
-  
 
+  
+  
 }
