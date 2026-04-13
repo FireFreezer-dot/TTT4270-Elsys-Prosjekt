@@ -5,9 +5,17 @@
 #include <vector>
 #include <numeric>
 #include <string.h>
+#include <HardwareSerial.h>
+
+// --- UART ---
+#define TXD2 16
+#define RXD2 17
+
+String sessionKey = ""; 
+const int max_distance = 10; // Avstandsterskel for å sende data over UART
 
 // --- KONFIGURASJON ---
-#define MAX_TARGETS 10
+#define MAX_TARGETS 12
 #define MAX_NAME_LEN 32
 #define MAX_SAMPLES 5
 
@@ -80,7 +88,7 @@ struct BLETarget {
 
 // --- LISTE OVER TARGETS ---
 BLETarget targets[MAX_TARGETS];
-int targetCount = 3;
+int targetCount = 12;
 
 // --- BLE ---
 BLEScan* pBLEScan;
@@ -114,6 +122,11 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
 
     Serial.printf("[BLE] Fant: %s | RSSI: %d dBm | Avstand: %.2f m\n",
       name.c_str(), rssi, target->distance);
+    
+    // Send enhetens navn over UART hvis den er langt unna
+    if (target->distance >= max_distance) {
+      mySerial.println(name); 
+    }
   }
 };
 
@@ -121,14 +134,22 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
 // --- SETUP ---
 void setup() {
   Serial.begin(115200);
+
+  // --- UART setup ---
+  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
+  
+  Serial.println("ESP32 UART Distance Measurement");
+
+  // --- Scanner setup ---
   delay(500);
 
   Serial.println("=== Avstandsmåler ESP32 (UART-versjon) ===");
 
+  /*
   targets[0] = BLETarget("iPhone");
   targets[1] = BLETarget("Galaxy S24");
   targets[2] = BLETarget("MacBook");
-
+  */
 
   BLEDevice::init("");
   pBLEScan = BLEDevice::getScan();
@@ -145,6 +166,14 @@ void setup() {
 
 // --- LOOP ---
 void loop() {
+  // --- UART: Sjekk for innkommende data ---
+  if (mySerial.available()) {
+    String sessionKey = mySerial.readStringUntil('\n');
+    targets.push_back(BLETarget(sessionKey.c_str()));
+    Serial.println("Mottatt session key: " + sessionKey);
+  }
+
+  // --- Scann etter BLE-enheter ---
   Serial.println("--- BLE skann ---");
   pBLEScan->start(SCAN_TIME, false);
   pBLEScan->clearResults();
@@ -154,5 +183,5 @@ void loop() {
     if (targets[i].seen) targets[i].print();
   }
 
-  delay(1000);
+  delay(100);
 }
