@@ -1,3 +1,6 @@
+// Denne koden ble brukt under utvikling. Det ble for mye, så vi bestemte oss for å splitte opp  
+// koden i flere filer og over flere esp-32 for lettere håndtering. Koden er derfor ikke komplett
+
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEScan.h>
