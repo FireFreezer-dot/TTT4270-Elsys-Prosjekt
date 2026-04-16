@@ -13,6 +13,7 @@ import android.os.ParcelUuid
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
@@ -30,13 +31,22 @@ object Globalvariable {
 }
 class MainActivity : AppCompatActivity() {
 
-    // ADD THIS LINE HERE (The "Introduction")
     private lateinit var binding: ActivityMainBinding
     private var currentCallback: AdvertiseCallback? = null
 
     private fun getAdvertiser(): BluetoothLeAdvertiser? {
         val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager //får tilgang til bluetooth (som manager)
         val bluetoothAdapter = bluetoothManager.adapter //henter adapteren
+
+        //Checking CONNECT permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("BLE", "No CONNECT permission")
+            return null
+        }
+
+        bluetoothAdapter.name = "PlisFunk"
+
         val advertiser = bluetoothAdapter.bluetoothLeAdvertiser //lagrer BLE advertising i varibelen advertiser
         return advertiser
     }
@@ -44,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     //Advertise from android to esp32
     private fun advertise(sessionKey: String?) {
 
-        //sjekk på at funksjonen kjører
+        //Checking that the function runs
         Log.d("BLE", "advertise() called with key: $sessionKey")
 
         val advertiser = getAdvertiser() ?: return
@@ -55,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val settings = AdvertiseSettings.Builder()
-            .setAdvertiseMode( AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY ) //for å spare strøm
+            .setAdvertiseMode( AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY )
             .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH )      //for å få signalet sendt
             .setConnectable( false )
             .build()
@@ -151,6 +161,18 @@ class MainActivity : AppCompatActivity() {
             Globalvariable.canShowTicket = false
             binding.etTicketAmount.text.clear()
             binding.etTicketName.text.clear()
+        }
+
+        //popup permission for bluetooth
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.BLUETOOTH_ADVERTISE,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ),
+                1
+            )
         }
 
         binding.btnGetTicket.setOnClickListener {
