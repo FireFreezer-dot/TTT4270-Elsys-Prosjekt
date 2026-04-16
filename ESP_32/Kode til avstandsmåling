@@ -7,45 +7,30 @@
 #include <string.h>
 #include <HardwareSerial.h>
 
+// --- KONFIGURASJON ---
+#define MAX_SAMPLES 5
+
 // --- UART ---
 #define TXD2 16
 #define RXD2 17
-
-String sessionKey = ""; 
-const int max_distance = 10; // Avstandsterskel for å sende data over UART
-
-// --- KONFIGURASJON ---
-#define MAX_TARGETS 12
-#define MAX_NAME_LEN 32
-#define MAX_SAMPLES 5
+HardwareSerial mySerial(2);
 
 const int MEASURED_POWER = -51;
 const float N = 2.0;
 const int SCAN_TIME = 2;
-
-// --- DATASTRUKTURER ---
-typedef struct ble_result {
-  char deviceName[MAX_NAME_LEN];
-  float avgRssi;
-  float distance;
-  int sampleCount;
-} ble_result;
+int max_distance = 20;
 
 // --- ENHETSOBJEKT ---
 struct BLETarget {
-  char name[MAX_NAME_LEN];
+  std::string serviceUUID;
   std::vector<int> rssiHistory;
-  float avgRssi    = 0;
-  float distance   = -1;
-  bool seen        = false;
+  float avgRssi  = 0;
+  float distance = -1;
+  bool seen      = false;
   unsigned long lastSeen = 0;
 
-  BLETarget() { name[0] = '\0'; }
 
-  BLETarget(const char* n) {
-    strncpy(name, n, MAX_NAME_LEN - 1);
-    name[MAX_NAME_LEN - 1] = '\0';
-  }
+  BLETarget(const char* uuid) : serviceUUID(uuid) {}
 
   void addRssi(int rssi) {
     rssiHistory.push_back(rssi);
@@ -59,51 +44,40 @@ struct BLETarget {
     lastSeen  = millis();
   }
 
-  void reset() {
-    rssiHistory.clear();
-    avgRssi  = 0;
-    distance = -1;
-    seen     = false;
-    lastSeen = 0;
-  }
-
   void print() const {
-    Serial.printf("  Enhet:      %s\n", name);
+    Serial.printf("  UUID:       %s\n", serviceUUID.c_str());
     Serial.printf("  RSSI snitt: %.1f dBm (%d/%d målinger)\n",
       avgRssi, (int)rssiHistory.size(), MAX_SAMPLES);
     Serial.printf("  Avstand:    %.2f m\n", distance);
     Serial.printf("  Sist sett:  %lu ms siden\n", millis() - lastSeen);
   }
-
-  ble_result toResult() const {
-    ble_result r;
-    strncpy(r.deviceName, name, MAX_NAME_LEN - 1);
-    r.deviceName[MAX_NAME_LEN - 1] = '\0';
-    r.avgRssi    = avgRssi;
-    r.distance   = distance;
-    r.sampleCount = rssiHistory.size();
-    return r;
-  }
 };
 
-// --- LISTE OVER TARGETS ---
-BLETarget targets[MAX_TARGETS];
-int targetCount = 12;
+// --- ENHETSLISTE ---
+std::vector<BLETarget> targets = {
+  BLETarget("36613032-6466-3465-6432-336565623938"),
+  BLETarget("11111111-1111-1111-1111-111111111111"),
+  BLETarget("22222222-2222-2222-2222-222222222222"),
+};
 
 // --- BLE ---
 BLEScan* pBLEScan;
 
 // --- HJELPEFUNKSJONER ---
-BLETarget* findTarget(const String& name) {
-  for (int i = 0; i < targetCount; i++)
-    if (name == String(targets[i].name)) return &targets[i];
+BLETarget* findTargetByUUID(const BLEUUID& uuid) {
+  String u = uuid.toString().c_str();
+  for (auto& t : targets) {
+    if (u == t.serviceUUID.c_str()) return &t;
+  }
   return nullptr;
 }
 
 void printAllTargets() {
-  Serial.println("[TARGETS] Aktive målenheter:");
-  for (int i = 0; i < targetCount; i++) {
-    Serial.printf("  %d: %s%s\n", i + 1, targets[i].name,
+  Serial.println("[TARGETS] Overvåker følgende enheter:");
+  for (int i = 0; i < (int)targets.size(); i++) {
+    Serial.printf("  %d: %s%s\n",
+      i + 1,
+      targets[i].serviceUUID.c_str(),
       targets[i].seen ? " (sett)" : " (ikke sett enda)");
   }
 }
@@ -111,45 +85,35 @@ void printAllTargets() {
 // --- BLE CALLBACK ---
 class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
   void onResult(BLEAdvertisedDevice advertisedDevice) {
-    if (!advertisedDevice.haveName()) return;
-    String name = String(advertisedDevice.getName().c_str());
+    if (!advertisedDevice.haveServiceUUID()) return;
 
-    BLETarget* target = findTarget(name);
+    BLEUUID uuid = advertisedDevice.getServiceUUID();
+    BLETarget* target = findTargetByUUID(uuid);
     if (target == nullptr) return;
 
     int rssi = advertisedDevice.getRSSI();
     target->addRssi(rssi);
 
-    Serial.printf("[BLE] Fant: %s | RSSI: %d dBm | Avstand: %.2f m\n",
-      name.c_str(), rssi, target->distance);
-    
-    // Send enhetens navn over UART hvis den er langt unna
+    Serial.printf("[BLE] %s | RSSI=%d | Avstand=%.2f m\n",
+      target->serviceUUID.c_str(), rssi, target->distance);
+       // Send enhetens navn over UART hvis den er langt unna
+
     if (target->distance >= max_distance) {
-      mySerial.println(name); 
+      mySerial.println(target->serviceUUID.c_str());  // <-- target-> og .c_str()
     }
   }
 };
 
-
 // --- SETUP ---
 void setup() {
   Serial.begin(115200);
-
-  // --- UART setup ---
-  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
-  
-  Serial.println("ESP32 UART Distance Measurement");
-
-  // --- Scanner setup ---
   delay(500);
 
-  Serial.println("=== Avstandsmåler ESP32 (UART-versjon) ===");
+    // --- UART setup ---
+  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
+  Serial.println("ESP32 UART Distance Measurement");
 
-  /*
-  targets[0] = BLETarget("iPhone");
-  targets[1] = BLETarget("Galaxy S24");
-  targets[2] = BLETarget("MacBook");
-  */
+  Serial.println("=== Avstandsmåler ESP32 (Service UUID-basert) ===");
 
   BLEDevice::init("");
   pBLEScan = BLEDevice::getScan();
@@ -163,7 +127,6 @@ void setup() {
   Serial.println("Starter skanning...\n");
 }
 
-
 // --- LOOP ---
 void loop() {
   // --- UART: Sjekk for innkommende data ---
@@ -173,15 +136,14 @@ void loop() {
     Serial.println("Mottatt session key: " + sessionKey);
   }
 
-  // --- Scann etter BLE-enheter ---
   Serial.println("--- BLE skann ---");
   pBLEScan->start(SCAN_TIME, false);
   pBLEScan->clearResults();
 
   Serial.println("\n=== STATUS ===");
-  for (int i = 0; i < targetCount; i++) {
-    if (targets[i].seen) targets[i].print();
+  for (auto& t : targets) {
+    if (t.seen) t.print();
   }
 
-  delay(100);
+  delay(1000);
 }
