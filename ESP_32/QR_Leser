@@ -10,25 +10,26 @@
 #define TXD2 16
 #define RXD2 17
 
-String sessionKey = ""; 
+String receivedMessage = ""; 
 
-// Use Serial2 for UART communication
 HardwareSerial mySerial(2);
 
 void setup() {
-  Serial.begin(115200);
-  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2);  // UART setup
-  
-  Serial.println("ESP32 UART Receiver");
+    Serial.begin(115200);
+    mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
+
+    Serial.println("ESP32 UART nr 1");
 }
 
 void loop() {
-  // Check if data is available to read
-  if (mySerial.available()) {
-    // Read data and display it
-    String sessionKey = mySerial.readStringUntil('\n');
-    Serial.println("Received: " + sessionKey);
-  }
+  // Sjekker om vi har data for lesing
+    if (mySerial.available()) {
+        // Leser data og viser det
+        String message = mySerial.readStringUntil('\n');
+        Serial.println("Received: " + message);
+    }
 
-  mySerial.println("Hello from ESP32!"); // Send data to the other device
+
+    // Denne sender en melding
+    mySerial.println("Hello from ESP32 UART nr 1");
 }

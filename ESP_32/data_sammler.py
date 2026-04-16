@@ -1,3 +1,5 @@
+# var for å visualisere data for signalstyrke (dB) og avstand (m) samlet inn fra ESP32-enheten.
+
 import numpy as np
 import matplotlib.pyplot as plt
 

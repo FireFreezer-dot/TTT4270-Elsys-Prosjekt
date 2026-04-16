@@ -9,15 +9,18 @@
 #define RXD2 17
 
 HardwareSerial mySerial(2);
- 
+
 String sessionKey = "";
 
 // --- Database ---
 #define MAX_TICKETS 100
 
+#define EAP_IDENTITY "matstbo@stud.ntnu.no" // Ditt brukernavn (som nevnt over)
+#define EAP_USERNAME "matstbo@stud.ntnu.no" // Ofte det samme som identity
+#define EAP_PASSWORD "Detsnørdetsnørtittelibom30"       // Ditt Feide-passord
 
-const char* ssid = "Mats Tobiasson sin iPhone";
-const char* password = "27042004";
+const char* ssid = "eduroam";
+// const char* password = "27042004";
 
 WebServer server(80);
 
@@ -72,6 +75,7 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
       Serial.println("Billett lagt til.");
 
       mySerial.println(newTicket.sessionKey); // Send session key over UART
+    
     }
   }
 }
@@ -154,7 +158,8 @@ void setup() {
   //Kobler til nett
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password);
+  //WiFi.begin(ssid, password);
+  WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
 
   //Printer så lenge internett ikke er koblet til
   while (WiFi.status() != WL_CONNECTED) {
@@ -188,7 +193,7 @@ void loop() {
     for (int i = 0; i < ticketCount; ++i) {
       if (mySerial.readStringUntil('\n') == tickets[i].sessionKey) {
         ticketNow -= tickets[i].amountCustomers;
-        for (int j = i; j<ticketCount-1;j++) {
+        for (int j = i; j<ticketCount-1; j++) {
         tickets[j] = tickets[j+1];
         }
         ticketCount--;
