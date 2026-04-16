@@ -1,6 +1,7 @@
 #include "esp_now.h"
 #include "WiFi.h"
 #include "ArduinoJson.h"
+#include "string.h"
 #define TXD2 16
 #define RXD2 17
 
@@ -15,9 +16,7 @@ String recievedMessage = "";
 HardwareSerial mySerial(2);
 
 //Definerer MAC-adresse til mottaker
-uint8_t broadcastAddress_1[] = {0xE4, 0x65, 0xB8, 0x7E, 0x32, 0x78}; 
-
-//uint8_t broadcastAddress_2[] = {0xE4, 0x65, 0xB8, 0x7E, 0x1D, 0xEC};
+uint8_t broadcastAddress[] = {0xE4, 0x65, 0xB8, 0x7E, 0x32, 0x78}; 
 
 //Lager en strukt for å komprimere JSON-filen til
 typedef struct struct_message {
@@ -31,10 +30,32 @@ typedef struct struct_message {
 struct_message myData;
 
 //Definerer info om peer
-esp_now_peer_info_t peerInfo_1;
+esp_now_peer_info_t peerInfo;
 
-//esp_now_peer_info_t peerInfo_2;
+String asciiHexToUUID(String ascii) {
+  // Fjern bindestreker
+  String clean = "";
+  for (int i = 0; i < ascii.length(); i++)
+    if (ascii[i] != '-') clean += ascii[i];
 
+  // Konverter ASCII-tegn til byte array
+  uint8_t bytes[16];
+  for (int i = 0; i < 16; i++) {
+    bytes[i] = (uint8_t)clean[i];
+  }
+
+  // Formater som UUID-streng fra bytes
+  char uuid[37];
+  snprintf(uuid, sizeof(uuid),
+    "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+    bytes[0],  bytes[1],  bytes[2],  bytes[3],
+    bytes[4],  bytes[5],
+    bytes[6],  bytes[7],
+    bytes[8],  bytes[9],
+    bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]);
+
+  return String(uuid);
+}
 
 void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
@@ -62,29 +83,17 @@ void setup() {
   esp_now_register_send_cb(OnDataSent);
 
   //Register peer
-  memset(&peerInfo_1, 0, sizeof(peerInfo_1));
-  memcpy(peerInfo_1.peer_addr, broadcastAddress_1, 6);
+  memset(&peerInfo, 0, sizeof(peerInfo));
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
 
-  //memset(&peerInfo_2, 0, sizeof(peerInfo_2));
-  //memcpy(peerInfo_2.peer_addr, broadcastAddress_2, 6);
-
-  peerInfo_1.channel = 0;
-  peerInfo_1.encrypt = false;
-
-  //peerInfo_2.channel = 0;
-  //peerInfo_2.encrypt = false;
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
 
   //Add peer
-  if (esp_now_add_peer(&peerInfo_1) != ESP_OK) {
-    Serial.println("Failed to add peer 1");
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("Failed to add peer");
     return;
   }
-
-  //if (esp_now_add_peer(&peerInfo_2) != ESP_OK) {
-  //  Serial.println("Failed to add peer 2");
-  //  return;
-  //}
-
 }
 
 void loop() {
@@ -110,11 +119,11 @@ void loop() {
     strncpy(myData.ticketID, doc["ticketID"], sizeof(myData.ticketID));
     myData.amountCustomers = doc["amountCustomers"];
     strncpy(myData.customerName, doc["customerName"], sizeof(myData.customerName));
-    strncpy(myData.sessionKey, doc["sessionKey"], sizeof(myData.sessionKey));
+    String uuid = asciiHexToUUID(doc["sessionKey"]);
+    strncpy(myData.sessionKey, uuid.c_str(), sizeof(myData.sessionKey));
+    Serial.println(uuid.c_str());
 
-    esp_err_t result = esp_now_send(broadcastAddress_1, (uint8_t *) &myData, sizeof(myData));
-
-    //result = esp_now_send(broadcastAddress_2, (uint8_t *) &myData, sizeof(myData));
+    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
 
     digitalWrite(ledPin_3, HIGH);
     delay(1000);
