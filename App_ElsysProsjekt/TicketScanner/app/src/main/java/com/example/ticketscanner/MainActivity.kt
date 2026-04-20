@@ -136,7 +136,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun idleState()
+    {
+        binding.btnDeleteTicket.visibility = View.VISIBLE
+        binding.etTicketAmount.visibility = View.GONE
+        binding.etTicketName.visibility = View.GONE
+        binding.btnGetTicket.text = "SHOW TICKET"
+        binding.ivQRCode.setImageResource(0)
+    }
 
+    fun inputState()
+    {
+        binding.btnDeleteTicket.visibility = View.GONE
+        binding.etTicketAmount.visibility = View.VISIBLE
+        binding.etTicketName.visibility = View.VISIBLE
+        binding.btnGetTicket.text = "GET TICKET"
+        binding.ivQRCode.setImageResource(0)
+        binding.etTicketAmount.text.clear()
+        binding.etTicketName.text.clear()
+    }
+
+    fun ticketState()
+    {
+        binding.btnDeleteTicket.visibility = View.GONE
+        binding.etTicketAmount.visibility = View.GONE
+        binding.etTicketName.visibility = View.GONE
+        binding.btnGetTicket.text = "HIDE TICKET"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,17 +178,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        var ticketShown : Boolean = false
-
-        binding.btnDeleteTicket.setOnClickListener {
-            binding.btnDeleteTicket.visibility = View.GONE
-            binding.etTicketAmount.visibility = View.VISIBLE
-            binding.etTicketName.visibility = View.VISIBLE
-            Globalvariable.canShowTicket = false
-            binding.etTicketAmount.text.clear()
-            binding.etTicketName.text.clear()
-        }
-
         //popup permission for bluetooth
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ActivityCompat.requestPermissions(
@@ -173,6 +188,16 @@ class MainActivity : AppCompatActivity() {
                 ),
                 1
             )
+        }
+
+        var ticketShown : Boolean = false
+
+        binding.btnDeleteTicket.setOnClickListener {
+
+            inputState()
+            Globalvariable.canShowTicket = false
+            ticketShown = false
+
         }
 
         binding.btnGetTicket.setOnClickListener {
@@ -201,32 +226,23 @@ class MainActivity : AppCompatActivity() {
                 binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
 
                 //Endrer eller skjuler knapp tekst / tekstfelt.
-                binding.btnGetTicket.text = "HIDE TICKET"
-                binding.etTicketAmount.visibility = View.GONE
-                binding.etTicketName.visibility = View.GONE
-                binding.btnDeleteTicket.visibility = View.GONE
-
+                ticketState()
+                Globalvariable.canShowTicket = true
                 ticketShown = true
 
                 advertise(sessionKey)
             }
             else {
                 if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty() && ticketShown){
-                    binding.btnDeleteTicket.visibility = View.VISIBLE
-                    binding.etTicketAmount.visibility = View.GONE
-                    binding.etTicketName.visibility = View.GONE
-                    binding.btnGetTicket.text = "SHOW TICKET"
+                    idleState()
+                    ticketShown = false
+                    Globalvariable.canShowTicket = true
                 }
                 else {
-                    binding.btnGetTicket.text = "GET TICKET"
-                    binding.etTicketAmount.visibility = View.VISIBLE
-                    binding.etTicketName.visibility = View.VISIBLE
-                    binding.etTicketName.text.clear()
-                    binding.etTicketAmount.text.clear()
+                    inputState()
+                    ticketShown = false
+                    Globalvariable.canShowTicket = false
                 }
-                binding.ivQRCode.setImageResource(0)
-
-                ticketShown = false
                 stopAdvertising()
             }
         }
