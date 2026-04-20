@@ -4,7 +4,6 @@
 #include <cmath>
 #include <vector>
 #include <numeric>
-#include <string.h>
 #include <HardwareSerial.h>
 
 // --- KONFIGURASJON ---
@@ -15,20 +14,23 @@
 #define RXD2 17
 HardwareSerial mySerial(2);
 
+//Brukes til utregning av avstand
 const int MEASURED_POWER = -51;
 const float N = 2.0;
+
 const int SCAN_TIME = 2;
-int max_distance = 20;
+int max_distance = 20; //Maks avstand enheten kan ha fra scanneren før den bir fjernet
+const unsigned long MAX_UNSEEN_MS = 10000; //Hvor lang tid det skal ta fra scanneren ikke finner enheten til den blir fjernet
 
 // --- ENHETSOBJEKT ---
 struct BLETarget {
   std::string serviceUUID;
   std::vector<int> rssiHistory;
-  float avgRssi  = 0;
-  float distance = -1;
-  bool seen      = false;
+  float avgRssi       = 0;
+  float distance      = -1;
+  bool seen           = false;
+  bool pendingRemoval = false;
   unsigned long lastSeen = 0;
-
 
   BLETarget(const char* uuid) : serviceUUID(uuid) {}
 
@@ -55,9 +57,7 @@ struct BLETarget {
 
 // --- ENHETSLISTE ---
 std::vector<BLETarget> targets = {
-  BLETarget("36613032-6466-3465-6432-336565623938"),
-  BLETarget("11111111-1111-1111-1111-111111111111"),
-  BLETarget("22222222-2222-2222-2222-222222222222"),
+  BLETarget("12345678-1234-1234-1234-123456789012"),
 };
 
 // --- BLE ---
@@ -72,14 +72,24 @@ BLETarget* findTargetByUUID(const BLEUUID& uuid) {
   return nullptr;
 }
 
-void printAllTargets() {
-  Serial.println("[TARGETS] Overvåker følgende enheter:");
-  for (int i = 0; i < (int)targets.size(); i++) {
-    Serial.printf("  %d: %s%s\n",
-      i + 1,
-      targets[i].serviceUUID.c_str(),
-      targets[i].seen ? " (sett)" : " (ikke sett enda)");
+//Markerer targets som ikke har blitt sett siden MAX_UNSEEN_MS
+void markStaleTargets() {
+  for (auto& t : targets) {
+    if (t.seen && (millis() - t.lastSeen) > MAX_UNSEEN_MS) {
+      Serial.println("Markerer som utgått: " + String(t.serviceUUID.c_str()));
+      mySerial.println(t.serviceUUID.c_str());
+      t.pendingRemoval = true;
+    }
   }
+}
+//Fjerner enheten som er markert for fjerning
+void removeMarkedTargets() {
+  targets.erase(
+    std::remove_if(targets.begin(), targets.end(), [](const BLETarget& t) {
+      return t.pendingRemoval;
+    }),
+    targets.end()
+  );
 }
 
 // --- BLE CALLBACK ---
@@ -87,19 +97,25 @@ class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
   void onResult(BLEAdvertisedDevice advertisedDevice) {
     if (!advertisedDevice.haveServiceUUID()) return;
 
+    //Henter enhet
     BLEUUID uuid = advertisedDevice.getServiceUUID();
     BLETarget* target = findTargetByUUID(uuid);
     if (target == nullptr) return;
 
+    //henter og oppdaterer rssi
     int rssi = advertisedDevice.getRSSI();
     target->addRssi(rssi);
 
+    //Skriver ut informasjon om enheten
     Serial.printf("[BLE] %s | RSSI=%d | Avstand=%.2f m\n",
       target->serviceUUID.c_str(), rssi, target->distance);
-       // Send enhetens navn over UART hvis den er langt unna
 
+    //Markerer for fjerning hvis den er for langt unna
     if (target->distance >= max_distance) {
-      mySerial.println(target->serviceUUID.c_str());  // <-- target-> og .c_str()
+      mySerial.println(target->serviceUUID.c_str());
+      Serial.println("Markerer for fjerning: " + String(target->serviceUUID.c_str()));
+      Serial.println("Avstand: " + String(target->distance) + "Tid: " + String(target->lastSeen));
+      target->pendingRemoval = true;
     }
   }
 };
@@ -109,12 +125,12 @@ void setup() {
   Serial.begin(115200);
   delay(500);
 
-    // --- UART setup ---
-  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
+  //Setter opp UART
+  mySerial.begin(9600, SERIAL_8N1, RXD2, TXD2);
   Serial.println("ESP32 UART Distance Measurement");
-
   Serial.println("=== Avstandsmåler ESP32 (Service UUID-basert) ===");
 
+  //Setter opp BLE
   BLEDevice::init("");
   pBLEScan = BLEDevice::getScan();
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
@@ -123,27 +139,33 @@ void setup() {
   pBLEScan->setWindow(99);
 
   Serial.println("BLE klar");
-  printAllTargets();
   Serial.println("Starter skanning...\n");
 }
 
-// --- LOOP ---
 void loop() {
-  // --- UART: Sjekk for innkommende data ---
+  //Henter informasjon fra web-ESP
   if (mySerial.available()) {
     String sessionKey = mySerial.readStringUntil('\n');
+    sessionKey.trim();
     targets.push_back(BLETarget(sessionKey.c_str()));
-    Serial.println("Mottatt session key: " + sessionKey);
+    Serial.println("Lagrer UUID: " + sessionKey);
+    pBLEScan->stop();
+    pBLEScan->clearResults();
   }
 
+  //Starter BLE skann
   Serial.println("--- BLE skann ---");
   pBLEScan->start(SCAN_TIME, false);
   pBLEScan->clearResults();
 
+  markStaleTargets();    // sjekker tid siden sist sett
+  removeMarkedTargets(); // fjerner alle markerte
+
+  //Skriver ut info om enheter
   Serial.println("\n=== STATUS ===");
   for (auto& t : targets) {
     if (t.seen) t.print();
   }
 
-  delay(1000);
+  delay(100);
 }
