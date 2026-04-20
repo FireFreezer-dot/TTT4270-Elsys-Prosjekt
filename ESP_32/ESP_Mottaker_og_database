@@ -187,18 +187,21 @@ void setup() {
 }
 
 void loop() {
-  server.handleClient();
 
   if (mySerial.available()) {
+    String receivedKey = mySerial.readStringUntil('\n');
+    receivedKey.trim();
+    Serial.println(receivedKey);
     for (int i = 0; i < ticketCount; ++i) {
-      if (mySerial.readStringUntil('\n') == tickets[i].sessionKey) {
+      if (receivedKey.equals(tickets[i].sessionKey)) {
         ticketNow -= tickets[i].amountCustomers;
         for (int j = i; j<ticketCount-1; j++) {
         tickets[j] = tickets[j+1];
         }
         ticketCount--;
-        return;
+        break;
       }
     }
   }
+  server.handleClient();
 }
