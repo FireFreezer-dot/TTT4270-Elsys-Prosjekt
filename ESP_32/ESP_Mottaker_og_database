@@ -3,27 +3,26 @@
 #include "WebServer.h"
 #include <string.h>
 #include <HardwareSerial.h>
-
-// --- UART ---
 #define TXD2 16
 #define RXD2 17
+#define EAP_IDENTITY "matstbo@stud.ntnu.no" //Ditt brukernavn (som nevnt over)
+#define EAP_USERNAME "matstbo@stud.ntnu.no" //Ofte det samme som identity
+#define EAP_PASSWORD "Detsnørdetsnørtittelibom30" //Ditt Feide-passord
+#define MAX_TICKETS 100 //Maksimal mengde billetter i databasen (webserver)
 
+//UART-setup
 HardwareSerial mySerial(2);
 
+//Definerer sessionKey som skal sendes 
 String sessionKey = "";
 
-// --- Database ---
-#define MAX_TICKETS 100
-
-#define EAP_IDENTITY "matstbo@stud.ntnu.no" // Ditt brukernavn (som nevnt over)
-#define EAP_USERNAME "matstbo@stud.ntnu.no" // Ofte det samme som identity
-#define EAP_PASSWORD "Detsnørdetsnørtittelibom30"       // Ditt Feide-passord
-
+//Definerer navn på nettverk
 const char* ssid = "eduroam";
-// const char* password = "27042004";
 
+//Initialiserer server til port 80
 WebServer server(80);
 
+//Definerer samme struct som ESP_1 
 typedef struct struct_message {
   char ticketID[32];
   int amountCustomers;
@@ -31,12 +30,15 @@ typedef struct struct_message {
   char sessionKey[40];  
 } struct_message;
 
+//Initialiserer liste med billetter
 struct_message tickets[MAX_TICKETS];
 
+//Definerer variabler som skal vises på webserveren
 int ticketCount = 0;
-int ticketEver = 0;
-int ticketNow = 0;
+int passengerEver = 0;
+int passengerNow = 0;
 
+//Definerer funksjon for å finne index til en billett i listen
 int findTicket(const char* id) {
   for (int i=0; i<ticketCount; i++) {
     if (strcmp(tickets[i].sessionKey,id)==0){
@@ -46,41 +48,55 @@ int findTicket(const char* id) {
   return -1;
 }
 
+//Funksjon for å fjerne en billett som finnes på indeksen index
+void fjernBillett(int index) {
+  Serial.println("Billett finnes allerede. Blir nå fjernet!");
+  passengerNow -= tickets[index].amountCustomers;
+  for (int i = index; i < ticketCount - 1; ++i) {
+    tickets[i] = tickets[i+1];
+  }
+  ticketCount--;
+}
+
+//Funksjon for å legg til en ny unik billett
+void leggTilBillett(struct_message ticket) {
+  Serial.println("Billett blir lagt til!");
+  tickets[ticketCount] = ticket;
+  ticketCount++;
+  passengerNow += ticket.amountCustomers;
+  passengerEver += ticket.amountCustomers;
+  mySerial.println(ticket.sessionKey);
+}
+
+//Definerer callback funksjon som skal kjøre når ESP-NOW sending er mottatt
 void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
+  //initialiserer en ny billett
   struct_message newTicket;
 
+  //Kopierer den mottatte billetten
   memcpy(&newTicket, incomingData, sizeof(newTicket));
 
+  //Bare for oversikt under testing
   Serial.println("Ticket ID: ");
   Serial.println(newTicket.ticketID);
   
-  int index = findTicket(newTicket.sessionKey);
+  //Definerer index for ny billett (>=0 om finnes allerede, -1 om ny)
+  int indeks = findTicket(newTicket.sessionKey);
 
-  if (index >= 0) {
-    Serial.println("Billett finnes allerede. Blir nå fjernet.");
-    ticketNow -= newTicket.amountCustomers;
-    for (int i = index; i<ticketCount-1;i++) {
-      tickets[i] = tickets[i+1];
-    }
-    ticketCount--;
-
+  //dersom billetten allerede finnes --> Noen scanner på nytt (går av fergen) --> minker antall passasjerer på fergen og fjerner billetten fra listen
+  if (indeks >= 0) {
+    fjernBillett(indeks);
   }
+  //Billetten er unik --> Legger til billetten i listen, og øker passasjer-variablene
   else {
     if (ticketCount < MAX_TICKETS) {
-      tickets[ticketCount] = newTicket;
-      ticketCount++;
-      ticketEver += newTicket.amountCustomers;
-      ticketNow += newTicket.amountCustomers;
-
-      Serial.println("Billett lagt til.");
-
-      mySerial.println(newTicket.sessionKey); // Send session key over UART
-    
+      leggTilBillett(newTicket);
     }
   }
 }
 
-void handleRoot(){
+//Definerer callback funksjon for formatering av nettside
+void passasjerDatabase(){
 
   String html = "<!DOCTYPE html><html>";
 
@@ -124,42 +140,43 @@ void handleRoot(){
   html += "</table>";
 
   html += "<h2>Total passengers now: ";
-  html += String(ticketNow);
+  html += String(passengerNow);
   html += "</h2>";
 
   html += "<h2>Total passengers ever: ";
-  html += String(ticketEver);
+  html += String(passengerEver);
   html += "</h2>";
 
   html += "</body></html>";
 
+  //Sender alt over til webserveren
   server.send(200,"text/html",html);
-
 }
 
 void setup() {
+  //Begynner serial monitor
   Serial.begin(115200);
 
-  // --- UART setup ---
-  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2);  // UART setup
-  
-  Serial.println("ESP32 UART Database");
+  //UART setup 
+  mySerial.begin(9600,SERIAL_8N1, RXD2, TXD2); 
 
   //Wifi-modus for å ta i mot ESP-NOW
   WiFi.mode(WIFI_STA);
 
+  //Sjekker at ESP-NOW blir initialisert riktig
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
   }
 
+  //Registrerer callback-funksjonen
   esp_now_register_recv_cb(OnDataRecv);
 
   //Kobler til nett
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  //WiFi.begin(ssid, password);
-  WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
+  WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD);  
+  //WiFi.begin(ssid_2, password);
 
   //Printer så lenge internett ikke er koblet til
   while (WiFi.status() != WL_CONNECTED) {
@@ -167,38 +184,39 @@ void setup() {
     Serial.print(".");
   }
 
+  //Ble brukt under testing
   Serial.println("");
   Serial.println("WiFi connected");
-  
+
   Serial.print("WiFi channel: ");
-  Serial.println(WiFi.channel());
+  Serial.println(WiFi.channel()); 
   
-  Serial.print("IP address: ");
+  Serial.println("IP address: ");
   //Print the IP address
   Serial.println(WiFi.localIP());
 
-  server.on("/", handleRoot);
-  //Start the server
+  //Definerer hvilken callback funksjon som skal kjøres om serveren blir aksessert (passasjerDatabase)
+  server.on("/", passasjerDatabase);
+  //Starter serveren
   server.begin();
-
+  //Printes om alle stegene før er blitt gjennomført riktig
   Serial.println("Web server started");
-
-
 }
 
 void loop() {
-
+  //Dersom det blir lest en melding fra UART (sessionKey til mobilen som gikk ut av rekkevidde)
   if (mySerial.available()) {
-    String receivedKey = mySerial.readStringUntil('\n');
+    //Kopierer den mottatte meldingen
+    String receivedKey = mySerial.readStringUntil('\n'); 
+    //Trimmer vekk tomrom
     receivedKey.trim();
-    Serial.println(receivedKey);
+    //Brukt for testing
+    //Serial.println(receivedKey);
+
+    //Ser gjennom alle billetter i listen. Dersom sessionKey matcher mottatt melding --> samme funksjonalitet som linje 67-73
     for (int i = 0; i < ticketCount; ++i) {
       if (receivedKey.equals(tickets[i].sessionKey)) {
-        ticketNow -= tickets[i].amountCustomers;
-        for (int j = i; j<ticketCount-1; j++) {
-        tickets[j] = tickets[j+1];
-        }
-        ticketCount--;
+        fjernBillett(i);
         break;
       }
     }
