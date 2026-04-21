@@ -53,21 +53,17 @@
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/btnGetTicket"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/etTicketName" />
+        app:layout_constraintStart_toEndOf="@id/textView" />
 
-
-    <EditText
-        android:id="@+id/etTicketName"
-        android:layout_width="190dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/btnGetTicket"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAX 12:"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/etTicketAmount"
         app:layout_constraintEnd_toStartOf="@+id/etTicketAmount"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etTicketAmount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

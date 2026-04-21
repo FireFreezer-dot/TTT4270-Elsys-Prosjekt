@@ -25,7 +25,6 @@ import java.util.UUID
 
 //initialiserer globale verdier
 object Globalvariable {
-    lateinit var name: String //lateinit slik at den blir oppdatert i senere if setning
     var amount: Int = 0 //Int må bli initialisert med en gang, skriver lik 0 men blir oppdater i if setning
     var canShowTicket: Boolean = false //standard verdi er false, oppdateres til true når alt stemmer
 }
@@ -140,7 +139,7 @@ class MainActivity : AppCompatActivity() {
     {
         binding.btnDeleteTicket.visibility = View.VISIBLE
         binding.etTicketAmount.visibility = View.GONE
-        binding.etTicketName.visibility = View.GONE
+        binding.textView.visibility = View.GONE
         binding.btnGetTicket.text = "SHOW TICKET"
         binding.ivQRCode.setImageResource(0)
     }
@@ -149,19 +148,26 @@ class MainActivity : AppCompatActivity() {
     {
         binding.btnDeleteTicket.visibility = View.GONE
         binding.etTicketAmount.visibility = View.VISIBLE
-        binding.etTicketName.visibility = View.VISIBLE
+        binding.textView.visibility = View.VISIBLE
         binding.btnGetTicket.text = "GET TICKET"
         binding.ivQRCode.setImageResource(0)
         binding.etTicketAmount.text.clear()
-        binding.etTicketName.text.clear()
     }
 
     fun ticketState()
     {
+        val builder = OobPayloadBuilder() //kjører bare funksjonen en gang
+        val payload = builder.buildPayload(Globalvariable.amount) //henter OOB string
+        val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
+        val sessionKey = builder.lastSessionKey //lagrer sessionkey i app
+        binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
+
         binding.btnDeleteTicket.visibility = View.GONE
         binding.etTicketAmount.visibility = View.GONE
-        binding.etTicketName.visibility = View.GONE
+        binding.textView.visibility = View.GONE
         binding.btnGetTicket.text = "HIDE TICKET"
+
+        advertise(sessionKey)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -193,47 +199,30 @@ class MainActivity : AppCompatActivity() {
         var ticketShown : Boolean = false
 
         binding.btnDeleteTicket.setOnClickListener {
-
             inputState()
             Globalvariable.canShowTicket = false
             ticketShown = false
-
         }
 
         binding.btnGetTicket.setOnClickListener {
 
             // 1 Initialisering av verdier
             //Sjekker om begge inputfelt er fylt ut også gjør vi de om til riktig format
-            if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty())
-            {
-                Globalvariable.name = binding.etTicketName.text.toString()
-                //Henter innhold fra inputfelt og konverterer til en Int. Gir null hvis ikke en Int.
-                Globalvariable.amount = binding.etTicketAmount.text.toString().toIntOrNull() ?: 0
-                Globalvariable.canShowTicket = false
-                if (Globalvariable.amount > 0 && Globalvariable.amount <= 12) {
-                    Globalvariable.canShowTicket = true
-                }
+            Globalvariable.amount = binding.etTicketAmount.text.toString().toIntOrNull() ?: 0
+            Globalvariable.canShowTicket = false
+            if (Globalvariable.amount > 0 && Globalvariable.amount <= 12) {
+                Globalvariable.canShowTicket = true
             }
 
             // 2 Sjekker tilstanden til programmet å går ut ifra det.
             // Viser ikke billet + gyldig tekst => hvis billet.
             if(!ticketShown && Globalvariable.canShowTicket) {
-
-                val builder = OobPayloadBuilder() //kjører bare funksjonen en gang
-                val payload = builder.buildPayload(Globalvariable.name, Globalvariable.amount) //henter OOB string
-                val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
-                val sessionKey = builder.lastSessionKey //lagrer sessionkey i app
-                binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
-
-                //Endrer eller skjuler knapp tekst / tekstfelt.
                 ticketState()
-                Globalvariable.canShowTicket = true
                 ticketShown = true
-
-                advertise(sessionKey)
+                Globalvariable.canShowTicket = true
             }
             else {
-                if (!binding.etTicketName.text.isEmpty() && !binding.etTicketAmount.text.isEmpty() && ticketShown){
+                if (!binding.etTicketAmount.text.isEmpty() && ticketShown){
                     idleState()
                     ticketShown = false
                     Globalvariable.canShowTicket = true

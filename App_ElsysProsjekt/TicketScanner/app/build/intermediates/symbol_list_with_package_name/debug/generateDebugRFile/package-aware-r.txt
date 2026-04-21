@@ -6,9 +6,9 @@ drawable ic_launcher_foreground
 id btnDeleteTicket
 id btnGetTicket
 id etTicketAmount
-id etTicketName
 id ivQRCode
 id main
+id textView
 layout activity_main
 mipmap ic_launcher
 mipmap ic_launcher_round

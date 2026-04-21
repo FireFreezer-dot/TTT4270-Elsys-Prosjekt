@@ -3252,7 +3252,6 @@ int id endToStart 0x7f0800b2
 int id enterAlways 0x7f0800b3
 int id enterAlwaysCollapsed 0x7f0800b4
 int id etTicketAmount 0x7f0800b5
-int id etTicketName 0x7f0800b6
 int id exitUntilCollapsed 0x7f0800b7
 int id expand_activities_button 0x7f0800b8
 int id expanded_menu 0x7f0800b9
@@ -3526,6 +3525,7 @@ int id textSpacerNoButtons 0x7f0801c4
 int id textSpacerNoTitle 0x7f0801c5
 int id textStart 0x7f0801c6
 int id textTop 0x7f0801c7
+int id textView 0x7f080207
 int id text_input_end_icon 0x7f0801c8
 int id text_input_error_icon 0x7f0801c9
 int id text_input_start_icon 0x7f0801ca

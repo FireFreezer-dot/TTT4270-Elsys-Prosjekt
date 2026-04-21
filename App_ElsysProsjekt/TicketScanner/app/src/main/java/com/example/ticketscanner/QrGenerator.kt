@@ -26,7 +26,7 @@ class OobPayloadBuilder {
     var lastSessionKey: String? = null //lagrer sessionkey i variabelm, til BLE connection
         private set
 
-    fun buildPayload(name: String, amount: Int): String {
+    fun buildPayload(amount: Int): String {
 
         //val customerName = "Ola Nordmann"
         //val amountCostumers = 1
@@ -38,7 +38,6 @@ class OobPayloadBuilder {
         val json = JSONObject().apply {
             put("ticketID", ticketID)
             put("amountCustomers", amount)
-            put("customerName", name)
             put("sessionKey", sessionKey)
         }
 

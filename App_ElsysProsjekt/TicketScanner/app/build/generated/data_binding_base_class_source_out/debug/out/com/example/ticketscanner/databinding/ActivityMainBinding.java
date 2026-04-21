@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,24 +32,24 @@ public final class ActivityMainBinding implements ViewBinding {
   public final EditText etTicketAmount;
 
   @NonNull
-  public final EditText etTicketName;
-
-  @NonNull
   public final ImageView ivQRCode;
 
   @NonNull
   public final ConstraintLayout main;
 
+  @NonNull
+  public final TextView textView;
+
   private ActivityMainBinding(@NonNull ConstraintLayout rootView, @NonNull Button btnDeleteTicket,
-      @NonNull Button btnGetTicket, @NonNull EditText etTicketAmount,
-      @NonNull EditText etTicketName, @NonNull ImageView ivQRCode, @NonNull ConstraintLayout main) {
+      @NonNull Button btnGetTicket, @NonNull EditText etTicketAmount, @NonNull ImageView ivQRCode,
+      @NonNull ConstraintLayout main, @NonNull TextView textView) {
     this.rootView = rootView;
     this.btnDeleteTicket = btnDeleteTicket;
     this.btnGetTicket = btnGetTicket;
     this.etTicketAmount = etTicketAmount;
-    this.etTicketName = etTicketName;
     this.ivQRCode = ivQRCode;
     this.main = main;
+    this.textView = textView;
   }
 
   @Override
@@ -96,12 +97,6 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.etTicketName;
-      EditText etTicketName = ViewBindings.findChildViewById(rootView, id);
-      if (etTicketName == null) {
-        break missingId;
-      }
-
       id = R.id.ivQRCode;
       ImageView ivQRCode = ViewBindings.findChildViewById(rootView, id);
       if (ivQRCode == null) {
@@ -110,8 +105,14 @@ public final class ActivityMainBinding implements ViewBinding {
 
       ConstraintLayout main = (ConstraintLayout) rootView;
 
+      id = R.id.textView;
+      TextView textView = ViewBindings.findChildViewById(rootView, id);
+      if (textView == null) {
+        break missingId;
+      }
+
       return new ActivityMainBinding((ConstraintLayout) rootView, btnDeleteTicket, btnGetTicket,
-          etTicketAmount, etTicketName, ivQRCode, main);
+          etTicketAmount, ivQRCode, main, textView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

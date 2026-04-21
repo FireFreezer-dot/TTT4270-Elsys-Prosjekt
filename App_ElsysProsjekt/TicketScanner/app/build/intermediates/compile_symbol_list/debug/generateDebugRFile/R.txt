@@ -5,9 +5,9 @@ int drawable ic_launcher_foreground 0x0
 int id btnDeleteTicket 0x0
 int id btnGetTicket 0x0
 int id etTicketAmount 0x0
-int id etTicketName 0x0
 int id ivQRCode 0x0
 int id main 0x0
+int id textView 0x0
 int layout activity_main 0x0
 int mipmap ic_launcher 0x0
 int mipmap ic_launcher_round 0x0
