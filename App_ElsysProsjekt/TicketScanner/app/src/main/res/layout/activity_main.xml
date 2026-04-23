@@ -66,4 +66,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/etTicketAmount" />
 
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/button1"-->
+<!--        android:layout_width="239dp"-->
+<!--        android:layout_height="114dp"-->
+<!--        app:backgroundTint = "@color/black"-->
+<!--        android:text="MAN OVERBOARD"-->
+<!--        android:textSize="30dp"-->
+<!--        app:cornerRadius="20dp"-->
+<!--        tools:layout_editor_absoluteX="86dp"-->
+<!--        tools:layout_editor_absoluteY="30dp" />-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

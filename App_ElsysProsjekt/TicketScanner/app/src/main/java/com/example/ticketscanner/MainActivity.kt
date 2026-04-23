@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ticketscanner.databinding.ActivityMainBinding
+import org.json.JSONObject
 import java.nio.ByteBuffer
 import java.util.UUID
 
@@ -27,6 +28,14 @@ import java.util.UUID
 object Globalvariable {
     var amount: Int = 0 //Int må bli initialisert med en gang, skriver lik 0 men blir oppdater i if setning
     var canShowTicket: Boolean = false //standard verdi er false, oppdateres til true når alt stemmer
+    private val json = JSONObject().apply {
+        put("ticketID", "")
+        put("amountCustomers", 0)
+        put("sessionKey", "")
+    }
+    var bitmap = QrGenerator().getBitmapFromString(json.toString())
+    var sessionKey: String? = null
+
 }
 class MainActivity : AppCompatActivity() {
 
@@ -105,17 +114,6 @@ class MainActivity : AppCompatActivity() {
                 super.onStartFailure(errorCode)
             }
         }
-
-//        val advertisingCallback: AdvertiseCallback = object : AdvertiseCallback() {
-//            override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
-//                super.onStartSuccess(settingsInEffect)
-//            }
-//
-//            override fun onStartFailure(errorCode: Int) {
-//                Log.e("BLE", "Advertising onStartFailure: " + errorCode)
-//                super.onStartFailure(errorCode)
-//            }
-//        }
         currentCallback = advertisingCallback
         advertiser.startAdvertising(settings, data, advertisingCallback)
     }
@@ -153,21 +151,16 @@ class MainActivity : AppCompatActivity() {
         binding.ivQRCode.setImageResource(0)
         binding.etTicketAmount.text.clear()
     }
-
     fun ticketState()
     {
-        val builder = OobPayloadBuilder() //kjører bare funksjonen en gang
-        val payload = builder.buildPayload(Globalvariable.amount) //henter OOB string
-        val bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
-        val sessionKey = builder.lastSessionKey //lagrer sessionkey i app
-        binding.ivQRCode.setImageBitmap(bitmap) //fremviser bitmap i app.
+        binding.ivQRCode.setImageBitmap(Globalvariable.bitmap) //fremviser bitmap i app.
 
         binding.btnDeleteTicket.visibility = View.GONE
         binding.etTicketAmount.visibility = View.GONE
         binding.textView.visibility = View.GONE
         binding.btnGetTicket.text = "HIDE TICKET"
 
-        advertise(sessionKey)
+        advertise(Globalvariable.sessionKey)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -197,11 +190,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         var ticketShown : Boolean = false
+        var isInput : Boolean = true
 
         binding.btnDeleteTicket.setOnClickListener {
             inputState()
             Globalvariable.canShowTicket = false
             ticketShown = false
+            isInput = true
+            stopAdvertising()
         }
 
         binding.btnGetTicket.setOnClickListener {
@@ -214,25 +210,39 @@ class MainActivity : AppCompatActivity() {
                 Globalvariable.canShowTicket = true
             }
 
-            // 2 Sjekker tilstanden til programmet å går ut ifra det.
-            // Viser ikke billet + gyldig tekst => hvis billet.
-            if(!ticketShown && Globalvariable.canShowTicket) {
-                ticketState()
-                ticketShown = true
-                Globalvariable.canShowTicket = true
-            }
-            else {
-                if (!binding.etTicketAmount.text.isEmpty() && ticketShown){
-                    idleState()
-                    ticketShown = false
+            if (isInput) {
+                if (Globalvariable.canShowTicket) {
+
+                    val builder = OobPayloadBuilder()
+                    val payload = builder.buildPayload(Globalvariable.amount) //henter OOB string
+                    Globalvariable.bitmap = QrGenerator().getBitmapFromString(payload) //generer bitmap av OOB string
+                    Globalvariable.sessionKey = builder.lastSessionKey //lagrer sessionkey i app
+
+                    ticketState()
+                    ticketShown = true
+                    isInput = false
                     Globalvariable.canShowTicket = true
                 }
                 else {
                     inputState()
                     ticketShown = false
+                    isInput = true
                     Globalvariable.canShowTicket = false
                 }
-                stopAdvertising()
+            }
+            else {
+                if(ticketShown) {
+                    idleState()
+                    ticketShown = false
+                    isInput = false
+                    Globalvariable.canShowTicket = true
+                }
+                else {
+                    ticketState()
+                    ticketShown = true
+                    isInput = false
+                    Globalvariable.canShowTicket = true
+                }
             }
         }
     }

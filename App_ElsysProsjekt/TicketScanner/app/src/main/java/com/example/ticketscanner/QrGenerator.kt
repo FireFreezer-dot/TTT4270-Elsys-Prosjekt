@@ -9,7 +9,6 @@ import java.security.SecureRandom
 import java.util.UUID
 
 
-
 class OobPayloadBuilder {
 
     private fun generateSessionKey(): String { //lager en randomised sessionkey string
