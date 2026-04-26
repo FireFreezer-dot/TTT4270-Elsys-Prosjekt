@@ -5,76 +5,94 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@drawable/ferry_background"
+    tools:context=".MainActivity"
+    android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnGetTicket"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="GET TICKET"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:id="@+id/waveLightView"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:background="@drawable/ic_wave_light"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-        android:id="@+id/btnDeleteTicket"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="DELETE TICKET"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/btnGetTicket"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-         />
+    <View
+        android:id="@+id/waveDarkView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@drawable/ic_wave_dark"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/ivQRCode"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/btnGetTicket"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_marginBottom="150dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/etTicketAmount"
-        android:layout_width="160dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="Passenger Amount"
-        android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/btnGetTicket"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MAX 12:"
-        android:textSize="20dp"
+        android:text="PASSENGERS (MAX 12):"
+        android:textSize="14sp"
+        android:textColor="@color/foam_white"
+        android:textStyle="bold"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/etTicketAmount"
         app:layout_constraintEnd_toStartOf="@+id/etTicketAmount"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/etTicketAmount" />
 
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/button1"-->
-<!--        android:layout_width="239dp"-->
-<!--        android:layout_height="114dp"-->
-<!--        app:backgroundTint = "@color/black"-->
-<!--        android:text="MAN OVERBOARD"-->
-<!--        android:textSize="30dp"-->
-<!--        app:cornerRadius="20dp"-->
-<!--        tools:layout_editor_absoluteX="86dp"-->
-<!--        tools:layout_editor_absoluteY="30dp" />-->
+    <EditText
+        android:id="@+id/etTicketAmount"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/et_background"
+        android:gravity="center"
+        android:hint="1"
+        android:inputType="number"
+        android:textColor="#0A2647"
+        app:layout_constraintBottom_toTopOf="@+id/btnGetTicket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textView" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDeleteTicket"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#B00020"
+        android:textColor="#FFFFFF"
+        android:text="DELETE TICKET"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/btnGetTicket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnGetTicket"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#0A2647"
+        android:textColor="#FFFFFF"
+        android:text="GET TICKET"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

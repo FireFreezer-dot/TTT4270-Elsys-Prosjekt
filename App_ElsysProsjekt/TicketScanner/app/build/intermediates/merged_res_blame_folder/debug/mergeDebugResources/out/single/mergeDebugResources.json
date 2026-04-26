@@ -8,6 +8,10 @@
         "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\anim_wave_bobbing_slow.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\anim\\wave_bobbing_slow.xml"
+    },
+    {
         "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ic_launcher_background.xml.flat",
         "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\ic_launcher_background.xml"
     },
@@ -24,20 +28,24 @@
         "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\layout\\activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-xhdpi\\ic_launcher.webp"
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ic_wave_pattern.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\ic_wave_pattern.xml"
     },
     {
-        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_et_background.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\et_background.xml"
     },
     {
         "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-hdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-hdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\xml_data_extraction_rules.xml.flat",
-        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\xml\\data_extraction_rules.xml"
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_background_wave_gradient.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\background_wave_gradient.xml"
+    },
+    {
+        "merged": "com.example.ticketscanner.app-debug-3:/drawable_ferry_background.xml.flat",
+        "source": "com.example.ticketscanner.app-main-5:/drawable/ferry_background.xml"
     },
     {
         "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ic_launcher_foreground.xml.flat",
@@ -52,16 +60,16 @@
         "source": "com.example.ticketscanner.app-main-5:/layout/activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-hdpi\\ic_launcher.webp"
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_btn_primary.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\btn_primary.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ferry_background.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\ferry_background.xml"
     },
     {
         "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-mdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-mdpi\\ic_launcher_round.webp"
-    },
-    {
-        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-xxxhdpi\\ic_launcher.webp"
     },
     {
         "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-mdpi_ic_launcher.webp.flat",
@@ -70,5 +78,45 @@
     {
         "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
         "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.example.ticketscanner.app-debug-3:/anim_wave_bobbing_slow.xml.flat",
+        "source": "com.example.ticketscanner.app-main-5:/anim/wave_bobbing_slow.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ic_single_wave.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\ic_single_wave.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ic_wave_light.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\ic_wave_light.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\anim_wave_bobbing.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\anim\\wave_bobbing.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\drawable_ic_wave_dark.xml.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\drawable\\ic_wave_dark.xml"
+    },
+    {
+        "merged": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-debug-3:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\flofr\\.gradle\\daemon\\9.1.0\\com.example.ticketscanner.app-main-5:\\mipmap-xxxhdpi\\ic_launcher.webp"
     }
 ]

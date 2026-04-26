@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.ParcelUuid
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
@@ -140,6 +141,7 @@ class MainActivity : AppCompatActivity() {
         binding.textView.visibility = View.GONE
         binding.btnGetTicket.text = "SHOW TICKET"
         binding.ivQRCode.setImageResource(0)
+        binding.ivQRCode.visibility = View.GONE
     }
 
     fun inputState()
@@ -149,16 +151,19 @@ class MainActivity : AppCompatActivity() {
         binding.textView.visibility = View.VISIBLE
         binding.btnGetTicket.text = "GET TICKET"
         binding.ivQRCode.setImageResource(0)
+        binding.ivQRCode.visibility = View.GONE
         binding.etTicketAmount.text.clear()
     }
     fun ticketState()
     {
         binding.ivQRCode.setImageBitmap(Globalvariable.bitmap) //fremviser bitmap i app.
+        binding.ivQRCode.visibility = View.VISIBLE
 
         binding.btnDeleteTicket.visibility = View.GONE
         binding.etTicketAmount.visibility = View.GONE
         binding.textView.visibility = View.GONE
         binding.btnGetTicket.text = "HIDE TICKET"
+
 
         advertise(Globalvariable.sessionKey)
     }
@@ -188,6 +193,21 @@ class MainActivity : AppCompatActivity() {
                 1
             )
         }
+        //------------------------------------------
+        //ANIMATION
+        // 1. Link to the two separate wave views
+        val waveLight = findViewById<View>(R.id.waveLightView)
+        val waveDark = findViewById<View>(R.id.waveDarkView)
+
+        // 2. Load the two different animations
+        val animFast = AnimationUtils.loadAnimation(this, R.anim.wave_bobbing)
+        val animSlow = AnimationUtils.loadAnimation(this, R.anim.wave_bobbing_slow)
+
+        // 3. Start them - they will now move independently
+        waveLight.startAnimation(animSlow)
+        waveDark.startAnimation(animFast)
+        //------------------------------------------
+
 
         var ticketShown : Boolean = false
         var isInput : Boolean = true

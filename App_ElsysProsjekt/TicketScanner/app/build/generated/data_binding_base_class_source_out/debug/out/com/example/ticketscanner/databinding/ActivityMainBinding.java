@@ -4,12 +4,12 @@ package com.example.ticketscanner.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
@@ -23,10 +23,10 @@ public final class ActivityMainBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
-  public final Button btnDeleteTicket;
+  public final AppCompatButton btnDeleteTicket;
 
   @NonNull
-  public final Button btnGetTicket;
+  public final AppCompatButton btnGetTicket;
 
   @NonNull
   public final EditText etTicketAmount;
@@ -40,9 +40,16 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final TextView textView;
 
-  private ActivityMainBinding(@NonNull ConstraintLayout rootView, @NonNull Button btnDeleteTicket,
-      @NonNull Button btnGetTicket, @NonNull EditText etTicketAmount, @NonNull ImageView ivQRCode,
-      @NonNull ConstraintLayout main, @NonNull TextView textView) {
+  @NonNull
+  public final View waveDarkView;
+
+  @NonNull
+  public final View waveLightView;
+
+  private ActivityMainBinding(@NonNull ConstraintLayout rootView,
+      @NonNull AppCompatButton btnDeleteTicket, @NonNull AppCompatButton btnGetTicket,
+      @NonNull EditText etTicketAmount, @NonNull ImageView ivQRCode, @NonNull ConstraintLayout main,
+      @NonNull TextView textView, @NonNull View waveDarkView, @NonNull View waveLightView) {
     this.rootView = rootView;
     this.btnDeleteTicket = btnDeleteTicket;
     this.btnGetTicket = btnGetTicket;
@@ -50,6 +57,8 @@ public final class ActivityMainBinding implements ViewBinding {
     this.ivQRCode = ivQRCode;
     this.main = main;
     this.textView = textView;
+    this.waveDarkView = waveDarkView;
+    this.waveLightView = waveLightView;
   }
 
   @Override
@@ -80,13 +89,13 @@ public final class ActivityMainBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btnDeleteTicket;
-      Button btnDeleteTicket = ViewBindings.findChildViewById(rootView, id);
+      AppCompatButton btnDeleteTicket = ViewBindings.findChildViewById(rootView, id);
       if (btnDeleteTicket == null) {
         break missingId;
       }
 
       id = R.id.btnGetTicket;
-      Button btnGetTicket = ViewBindings.findChildViewById(rootView, id);
+      AppCompatButton btnGetTicket = ViewBindings.findChildViewById(rootView, id);
       if (btnGetTicket == null) {
         break missingId;
       }
@@ -111,8 +120,20 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.waveDarkView;
+      View waveDarkView = ViewBindings.findChildViewById(rootView, id);
+      if (waveDarkView == null) {
+        break missingId;
+      }
+
+      id = R.id.waveLightView;
+      View waveLightView = ViewBindings.findChildViewById(rootView, id);
+      if (waveLightView == null) {
+        break missingId;
+      }
+
       return new ActivityMainBinding((ConstraintLayout) rootView, btnDeleteTicket, btnGetTicket,
-          etTicketAmount, ivQRCode, main, textView);
+          etTicketAmount, ivQRCode, main, textView, waveDarkView, waveLightView);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
