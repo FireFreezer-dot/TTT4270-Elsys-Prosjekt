@@ -4,34 +4,33 @@
 #include "string.h"
 #define TXD2 16
 #define RXD2 17
-
 #define ledPin_1 2
 #define ledPin_2 12
 #define ledPin_3 14
 
-//Definer den scannede meldingen
+//Initialiserer den scannede meldingen
 String recievedMessage = "";
 
-//Use Serial2 for UART kommunikasjon
+//UART-setup
 HardwareSerial mySerial(2);
 
-//Definerer MAC-adresse til mottaker
-uint8_t broadcastAddress[] = {0xE4, 0x65, 0xB8, 0x7E, 0x32, 0x78}; 
+//Initialiserer MAC-adresse til mottaker
+uint8_t broadcastAddress[] = {0xE4, 0x65, 0xB8, 0x7E, 0x1D, 0xEC}; 
 
 //Lager en strukt for å komprimere JSON-filen til
 typedef struct struct_message {
   char ticketID[32];
   int amountCustomers;
-  char customerName[32];
   char sessionKey[40];  
 } struct_message;
 
-//Definerer myData som skal sendes via ESP-NOW
+//Deklarerer myData som skal sendes via ESP-NOW
 struct_message myData;
 
-//Definerer info om peer
+//Deklarerer variabel for informasjon om peer
 esp_now_peer_info_t peerInfo;
 
+//Omgjører sessionKey fra streng til UUID (informasjon for BLE-kobling)
 String asciiHexToUUID(String ascii) {
   // Fjern bindestreker
   String clean = "";
@@ -57,14 +56,23 @@ String asciiHexToUUID(String ascii) {
   return String(uuid);
 }
 
+//Callback funksjon som kjøres når det er registrert en ESP-NOW sending
 void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+  //Definerer tiden "porten" skal være åpen som 3 sekunder multiplisert med antall passasjer på billetten
+  int time_length = myData.amountCustomers*3000;
+  //Blå diode lyser 
+  digitalWrite(ledPin_1, HIGH);
+  delay(time_length);
+  digitalWrite(ledPin_1, LOW);
 }
 
 void setup() {
+  //Begynner serial monitor 
   Serial.begin(115200);
 
+  //Pin som representerer port, ikke-godkjent scanning og godkjent scanning blir definert som Output
   pinMode(ledPin_1, OUTPUT);
   pinMode(ledPin_2, OUTPUT);
   pinMode(ledPin_3, OUTPUT);
@@ -73,23 +81,27 @@ void setup() {
   mySerial.begin(9600, SERIAL_8N1, RXD2, TXD2); 
   Serial.println("ESP32 UART Reciever");
 
+  //Wifi modus for ESP-NOW sending
   WiFi.mode(WIFI_STA);
 
+  //Sjekk om ESP-NOW blir initialisert riktig
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
     return;
   }
-
+  
+  //Registrer callback-funksjonen
   esp_now_register_send_cb(OnDataSent);
 
   //Register peer
   memset(&peerInfo, 0, sizeof(peerInfo));
   memcpy(peerInfo.peer_addr, broadcastAddress, 6);
 
+  //Spesifiserer sending-kanalen, og enkrypsjonen
   peerInfo.channel = 0;
   peerInfo.encrypt = false;
 
-  //Add peer
+  //Registrerer peer
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
     Serial.println("Failed to add peer");
     return;
@@ -100,40 +112,45 @@ void loop() {
 
   //Sjekker om data er tilgjengelig for å lese
   if (mySerial.available()) {
+    
+    //Kopierer den leste Json-filen
     recievedMessage = mySerial.readStringUntil('\n');
     Serial.println("Recieved: " + recievedMessage);
 
+    //Definerer den deserialiserte Json-filen
     StaticJsonDocument<256> doc;
 
+    //Dersom deserialiseringen ikke fungerer blir error høy, hvis ikke lav
     DeserializationError error = deserializeJson(doc, recievedMessage);
 
     if (error) {
       Serial.print("JSON parse error: ");
       Serial.println(error.c_str());
+      //Dersom deserialiseringen ikke fungerer (ikke riktig format) --> Rød diode lyser (QR-scanningen fungerte ikke)
       digitalWrite(ledPin_2, HIGH);
+      //Lyser i ett sekund
       delay(1000);
       digitalWrite(ledPin_2, LOW);
       return;
     }
 
+    //Kopierer alle variablene til QR-koden inn i structen "myData" 
     strncpy(myData.ticketID, doc["ticketID"], sizeof(myData.ticketID));
     myData.amountCustomers = doc["amountCustomers"];
-    strncpy(myData.customerName, doc["customerName"], sizeof(myData.customerName));
+    //Må først endre formatet til sessionKey
     String uuid = asciiHexToUUID(doc["sessionKey"]);
     strncpy(myData.sessionKey, uuid.c_str(), sizeof(myData.sessionKey));
     Serial.println(uuid.c_str());
 
+    //"myData" blir sendt via ESP-NOW. Samme oppsett som linje 119. 
     esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
 
+    //Siden deserialiseringen fungerte er QR-koden i riktig format --> Grønn diode lyser i ett sekund
     digitalWrite(ledPin_3, HIGH);
     delay(1000);
     digitalWrite(ledPin_3, LOW);
 
-    int time_length = myData.amountCustomers*3000;
-    digitalWrite(ledPin_1, HIGH);
-    delay(time_length);
-    digitalWrite(ledPin_1, LOW);
-
+    //Bare for å se at sendingen gikk bra via serial monitor
     if (result == ESP_OK){
       Serial.println("Sending confirmed");
     }
