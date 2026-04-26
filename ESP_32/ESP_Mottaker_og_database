@@ -13,32 +13,31 @@
 //UART-setup
 HardwareSerial mySerial(2);
 
-//Definerer sessionKey som skal sendes 
+//Initialiserer sessionKey som skal sendes 
 String sessionKey = "";
 
-//Definerer navn på nettverk
+//Initialiserer navn på nettverk
 const char* ssid = "eduroam";
 
-//Initialiserer server til port 80
+//Deklarerer server til port 80
 WebServer server(80);
 
-//Definerer samme struct som ESP_1 
+//Initialiserer samme struct som ESP_1 
 typedef struct struct_message {
   char ticketID[32];
   int amountCustomers;
-  char customerName[32];
   char sessionKey[40];  
 } struct_message;
 
 //Initialiserer liste med billetter
 struct_message tickets[MAX_TICKETS];
 
-//Definerer variabler som skal vises på webserveren
+//Initialiserer variabler som skal vises på webserveren
 int ticketCount = 0;
 int passengerEver = 0;
 int passengerNow = 0;
 
-//Definerer funksjon for å finne index til en billett i listen
+//Initialiserer funksjon for å finne index til en billett i listen
 int findTicket(const char* id) {
   for (int i=0; i<ticketCount; i++) {
     if (strcmp(tickets[i].sessionKey,id)==0){
@@ -68,9 +67,9 @@ void leggTilBillett(struct_message ticket) {
   mySerial.println(ticket.sessionKey);
 }
 
-//Definerer callback funksjon som skal kjøre når ESP-NOW sending er mottatt
+//Callback funksjon som skal kjøre når ESP-NOW sending er mottatt
 void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
-  //initialiserer en ny billett
+  //Deklarerer en ny billett
   struct_message newTicket;
 
   //Kopierer den mottatte billetten
@@ -80,10 +79,10 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
   Serial.println("Ticket ID: ");
   Serial.println(newTicket.ticketID);
   
-  //Definerer index for ny billett (>=0 om finnes allerede, -1 om ny)
+  //Initialiserer index for ny billett (>=0 om finnes allerede, -1 om ny)
   int indeks = findTicket(newTicket.sessionKey);
 
-  //dersom billetten allerede finnes --> Noen scanner på nytt (går av fergen) --> minker antall passasjerer på fergen og fjerner billetten fra listen
+  //Dersom billetten allerede finnes --> Noen scanner på nytt (går av fergen) --> minker antall passasjerer på fergen og fjerner billetten fra listen
   if (indeks >= 0) {
     fjernBillett(indeks);
   }
@@ -95,62 +94,111 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
   }
 }
 
-//Definerer callback funksjon for formatering av nettside
-void passasjerDatabase(){
+//Callback funksjon for formatering av nettside
 
+void passasjerDatabase() {
   String html = "<!DOCTYPE html><html>";
 
   html += "<head>";
   html += "<title>Boat Passenger Database</title>";
   html += "<meta http-equiv='refresh' content='2'>";
+  html += "<meta name='viewport' content='width=device-width, initial-scale=1'>";
+  
+  html += "<style>";
+  html += "body{font-family:Arial,sans-serif;background:#eef2f7;margin:0;padding:20px;color:#333;}";
+  
+  html += ".container{max-width:900px;margin:auto;}";
+
+  html += ".header{background:linear-gradient(135deg,#0077b6,#0096c7);";
+  html += "color:white;padding:25px;border-radius:18px;";
+  html += "box-shadow:0 6px 15px rgba(0,0,0,0.15);text-align:center;}";
+
+  html += ".stats{display:flex;gap:20px;flex-wrap:wrap;margin:25px 0;}";
+
+  html += ".card{flex:1;min-width:250px;background:white;padding:20px;";
+  html += "border-radius:16px;box-shadow:0 4px 10px rgba(0,0,0,0.08);";
+  html += "text-align:center;}";
+
+  html += ".card h2{margin:0;color:#0077b6;font-size:18px;}";
+  html += ".number{font-size:42px;font-weight:bold;margin-top:12px;}";
+
+  html += ".table-box{background:white;padding:20px;border-radius:16px;";
+  html += "box-shadow:0 4px 10px rgba(0,0,0,0.08);}";
+
+  html += "table{width:100%;border-collapse:collapse;font-size:18px;}";
+  html += "th{background:#0077b6;color:white;padding:14px;}";
+  html += "td{padding:12px;border-bottom:1px solid #ddd;text-align:center;}";
+  html += "tr:nth-child(even){background:#f8fbff;}";
+  html += "tr:hover{background:#dff3ff;}";
+
+  html += ".footer{margin-top:20px;text-align:center;color:#666;font-size:14px;}";
+
+  html += "@media(max-width:700px){";
+  html += ".stats{flex-direction:column;}";
+  html += "table{font-size:16px;}";
+  html += "}";
+  
+  html += "</style>";
   html += "</head>";
 
-  html += "<body style='font-family:Arial'>";
+  html += "<body>";
+  html += "<div class='container'>";
 
+  // Header
+  html += "<div class='header'>";
   html += "<h1>Passenger Database</h1>";
+  html += "<p>Live update every 2 seconds</p>";
+  html += "</div>";
 
-  html += "<table border='1' style='border-collapse:collapse'>";
+  // Stats cards
+  html += "<div class='stats'>";
 
+  html += "<div class='card'>";
+  html += "<h2>Passengers Onboard</h2>";
+  html += "<div class='number'>";
+  html += String(passengerNow);
+  html += "</div></div>";
+
+  html += "<div class='card'>";
+  html += "<h2>Total Passengers Ever</h2>";
+  html += "<div class='number'>";
+  html += String(passengerEver);
+  html += "</div></div>";
+
+  html += "</div>";
+
+  // Table
+  html += "<div class='table-box'>";
+  html += "<h2>Tickets</h2>";
+
+  html += "<table>";
   html += "<tr>";
   html += "<th>Ticket ID</th>";
-  html += "<th>Name</th>";
   html += "<th>Passengers</th>";
   html += "</tr>";
 
   for(int i=0;i<ticketCount;i++){
-
     html += "<tr>";
-
     html += "<td>";
     html += tickets[i].ticketID;
     html += "</td>";
-
-    html += "<td>";
-    html += tickets[i].customerName;
-    html += "</td>";
-
     html += "<td>";
     html += String(tickets[i].amountCustomers);
     html += "</td>";
-
     html += "</tr>";
-
   }
 
   html += "</table>";
+  html += "</div>";
 
-  html += "<h2>Total passengers now: ";
-  html += String(passengerNow);
-  html += "</h2>";
+  html += "<div class='footer'>";
+  html += "Boat Passenger Monitoring System";
+  html += "</div>";
 
-  html += "<h2>Total passengers ever: ";
-  html += String(passengerEver);
-  html += "</h2>";
-
+  html += "</div>";
   html += "</body></html>";
 
-  //Sender alt over til webserveren
-  server.send(200,"text/html",html);
+  server.send(200, "text/html", html);
 }
 
 void setup() {
