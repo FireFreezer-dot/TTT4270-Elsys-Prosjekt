@@ -1,9 +1,9 @@
 #include "esp_now.h"
 #include "WiFi.h"
 #include "WebServer.h"
+#include "esp_wifi.h"
 #include <string.h>
 #include <HardwareSerial.h>
-#include "esp_wifi.h"
 #define TXD2 16
 #define RXD2 17
 #define EAP_IDENTITY "matstbo@stud.ntnu.no" //Ditt brukernavn (som nevnt over)
@@ -19,6 +19,8 @@ String sessionKey = "";
 
 //Initialiserer navn på nettverk
 const char* ssid = "eduroam";
+const char* ssid_2 = "Mats Tobiasson sin iPhone";
+const char* password = "27042004";
 
 //Deklarerer server til port 80
 WebServer server(80);
@@ -211,7 +213,7 @@ void setup() {
 
   //Wifi-modus for å ta i mot ESP-NOW
   WiFi.mode(WIFI_STA);
-  esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE);
+  //esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE);
 
   //Sjekker at ESP-NOW blir initialisert riktig
   if (esp_now_init() != ESP_OK) {
@@ -225,6 +227,7 @@ void setup() {
   //Kobler til nett
   Serial.print("Connecting to ");
   Serial.println(ssid);
+  //Serial.println(ssid_2);
   WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD);  
   //WiFi.begin(ssid_2, password);
 
