@@ -84,7 +84,7 @@ void setup() {
 
   //Wifi modus for ESP-NOW sending
   WiFi.mode(WIFI_STA);
-  esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE);
+  //esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE);
 
   //Sjekk om ESP-NOW blir initialisert riktig
   if (esp_now_init() != ESP_OK) {
@@ -102,6 +102,8 @@ void setup() {
   //Spesifiserer sending-kanalen, og enkrypsjonen
   peerInfo.channel = 0;
   peerInfo.encrypt = false;
+  Serial.println("Wifi channel: ");
+  Serial.println(WiFi.channel());
 
   //Registrerer peer
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
