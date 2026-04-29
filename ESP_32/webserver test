@@ -1,164 +1,246 @@
 #include "esp_now.h"
 #include "WiFi.h"
-#include "ArduinoJson.h"
-#include "string.h"
+#include "WebServer.h"
+#include <string.h>
+#include <HardwareSerial.h>
 #include "esp_wifi.h"
+#include "SPIFFS.h"
+
 #define TXD2 16
 #define RXD2 17
-#define ledPin_1 2
-#define ledPin_2 12
-#define ledPin_3 14
 
-//Initialiserer den scannede meldingen
-String recievedMessage = "";
+#define EAP_IDENTITY "matstbo@stud.ntnu.no"
+#define EAP_USERNAME "matstbo@stud.ntnu.no"
+#define EAP_PASSWORD "Detsnørdetsnørtittelibom30"
 
-//UART-setup
+#define MAX_TICKETS 100
+#define MAX_MEASUREMENTS 300
+
+// UART
 HardwareSerial mySerial(2);
 
-//Initialiserer MAC-adresse til mottaker
-uint8_t broadcastAddress[] = {0xE4, 0x65, 0xB8, 0x7E, 0x1D, 0xEC}; 
+// WiFi
+const char* ssid = "eduroam";
+WebServer server(80);
 
-//Lager en strukt for å komprimere JSON-filen til
-typedef struct struct_message {
+// ---------- DATASTRUKTURER ----------
+
+typedef struct {
   char ticketID[32];
   int amountCustomers;
-  char sessionKey[40];  
+  char sessionKey[40];
 } struct_message;
 
-//Deklarerer myData som skal sendes via ESP-NOW
-struct_message myData;
+typedef struct {
+  bool success;
+  unsigned long latencyMs;
+} measurement_t;
 
-//Deklarerer variabel for informasjon om peer
-esp_now_peer_info_t peerInfo;
+// ---------- GLOBALE VARIABLER ----------
 
-//Omgjører sessionKey fra streng til UUID (informasjon for BLE-kobling)
-String asciiHexToUUID(String ascii) {
-  // Fjern bindestreker
-  String clean = "";
-  for (int i = 0; i < ascii.length(); i++)
-    if (ascii[i] != '-') clean += ascii[i];
+struct_message tickets[MAX_TICKETS];
+measurement_t measurements[MAX_MEASUREMENTS];
 
-  // Konverter ASCII-tegn til byte array
-  uint8_t bytes[16];
-  for (int i = 0; i < 16; i++) {
-    bytes[i] = (uint8_t)clean[i];
+int ticketCount = 0;
+int passengerEver = 0;
+int passengerNow = 0;
+int measurementCount = 0;
+
+// Latency-måling (KORREKT)
+bool pendingMeasurement = false;
+unsigned long measurementStartTime = 0;
+bool lastMeasurementSuccess = false;
+
+// ---------- HJELPEFUNKSJONER ----------
+
+int findTicket(const char* id) {
+  for (int i = 0; i < ticketCount; i++) {
+    if (strcmp(tickets[i].sessionKey, id) == 0) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+void fjernBillett(int index) {
+  passengerNow -= tickets[index].amountCustomers;
+  for (int i = index; i < ticketCount - 1; i++) {
+    tickets[i] = tickets[i + 1];
+  }
+  ticketCount--;
+}
+
+void leggTilBillett(struct_message ticket) {
+  tickets[ticketCount] = ticket;
+  ticketCount++;
+  passengerNow += ticket.amountCustomers;
+  passengerEver += ticket.amountCustomers;
+  mySerial.println(ticket.sessionKey);
+}
+
+// ---------- MÅLELOGGING ----------
+
+void saveMeasurementsToFile() {
+  File file = SPIFFS.open("/measurements.csv", FILE_WRITE);
+  if (!file) {
+    Serial.println("Kunne ikke åpne fil");
+    return;
   }
 
-  // Formater som UUID-streng fra bytes
-  char uuid[37];
-  snprintf(uuid, sizeof(uuid),
-    "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-    bytes[0],  bytes[1],  bytes[2],  bytes[3],
-    bytes[4],  bytes[5],
-    bytes[6],  bytes[7],
-    bytes[8],  bytes[9],
-    bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]);
+  file.println("index,success,latency_ms");
 
-  return String(uuid);
+  for (int i = 0; i < measurementCount; i++) {
+    file.print(i);
+    file.print(",");
+    file.print(measurements[i].success ? "1" : "0");
+    file.print(",");
+    file.println(measurements[i].latencyMs);
+  }
+
+  file.close();
+  Serial.println("Målinger lagret til SPIFFS (/measurements.csv)");
 }
 
-//Callback funksjon som kjøres når det er registrert en ESP-NOW sending
-void OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
-  Serial.print("\r\nLast Packet Send Status:\t");
-  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-  //Definerer tiden "porten" skal være åpen som 3 sekunder multiplisert med antall passasjer på billetten
-  int time_length = myData.amountCustomers*3000;
-  //Blå diode lyser 
-  digitalWrite(ledPin_1, HIGH);
-  delay(time_length);
-  digitalWrite(ledPin_1, LOW);
+void logMeasurement(bool success, unsigned long startTime) {
+  if (measurementCount >= MAX_MEASUREMENTS) return;
+
+  measurements[measurementCount].success = success;
+  measurements[measurementCount].latencyMs = millis() - startTime;
+  measurementCount++;
+
+  if (measurementCount == MAX_MEASUREMENTS) {
+    saveMeasurementsToFile();
+  }
 }
+
+// ---------- ESP-NOW CALLBACK ----------
+
+void OnDataRecv(const esp_now_recv_info_t *info,
+                const uint8_t *incomingData, int len) {
+
+  measurementStartTime = millis();
+  pendingMeasurement = true;
+
+  bool success = false;
+
+  struct_message newTicket;
+  memcpy(&newTicket, incomingData, sizeof(newTicket));
+
+  int indeks = findTicket(newTicket.sessionKey);
+
+  if (indeks >= 0) {
+    fjernBillett(indeks);
+    success = true;
+  } 
+  else if (ticketCount < MAX_TICKETS) {
+    leggTilBillett(newTicket);
+    success = true;
+  }
+
+  lastMeasurementSuccess = success;
+}
+
+// ---------- WEBSIDE ----------
+
+void passasjerDatabase() {
+
+  // ⭐ HER MÅLES LATENCY RIKTIG ⭐
+  if (pendingMeasurement) {
+    logMeasurement(lastMeasurementSuccess, measurementStartTime);
+    pendingMeasurement = false;
+  }
+
+  String html = "<!DOCTYPE html><html><head>";
+  html += "<meta http-equiv='refresh' content='2'>";
+  html += "<meta name='viewport' content='width=device-width, initial-scale=1'>";
+  html += "<style>body{font-family:Arial}</style></head><body>";
+
+  html += "<h1>Passenger Database</h1>";
+  html += "<p>Passengers onboard: " + String(passengerNow) + "</p>";
+  html += "<p>Total passengers ever: " + String(passengerEver) + "</p>";
+  html += "<p>Measurements: " + String(measurementCount) + " / 300</p>";
+
+  html += "<table border='1'><tr><th>Ticket ID</th><th>Passengers</th></tr>";
+  for (int i = 0; i < ticketCount; i++) {
+    html += "<tr><td>";
+    html += tickets[i].ticketID;
+    html += "</td><td>";
+    html += String(tickets[i].amountCustomers);
+    html += "</td></tr>";
+  }
+  html += "</table>";
+
+  html += "<p><a href='/download'>Download measurements (CSV)</a></p>";
+
+  html += "</body></html>";
+  server.send(200, "text/html", html);
+}
+
+// ---------- LAST NED CSV ----------
+
+void downloadMeasurements() {
+  if (!SPIFFS.exists("/measurements.csv")) {
+    server.send(404, "text/plain", "File not found");
+    return;
+  }
+
+  File file = SPIFFS.open("/measurements.csv", FILE_READ);
+  server.streamFile(file, "text/csv");
+  file.close();
+}
+
+// ---------- SETUP ----------
 
 void setup() {
-  //Begynner serial monitor 
   Serial.begin(115200);
+  mySerial.begin(9600, SERIAL_8N1, RXD2, TXD2);
 
-  //Pin som representerer port, ikke-godkjent scanning og godkjent scanning blir definert som Output
-  pinMode(ledPin_1, OUTPUT);
-  pinMode(ledPin_2, OUTPUT);
-  pinMode(ledPin_3, OUTPUT);
+  if (!SPIFFS.begin(true)) {
+    Serial.println("SPIFFS init feilet");
+  }
 
-  //UART setup
-  mySerial.begin(9600, SERIAL_8N1, RXD2, TXD2); 
-  Serial.println("ESP32 UART Reciever");
-
-  //Wifi modus for ESP-NOW sending
   WiFi.mode(WIFI_STA);
   esp_wifi_set_channel(6, WIFI_SECOND_CHAN_NONE);
 
-  //Sjekk om ESP-NOW blir initialisert riktig
   if (esp_now_init() != ESP_OK) {
-    Serial.println("Error initializing ESP-NOW");
+    Serial.println("ESP-NOW init feilet");
     return;
   }
-  
-  //Registrer callback-funksjonen
-  esp_now_register_send_cb(OnDataSent);
 
-  //Register peer
-  memset(&peerInfo, 0, sizeof(peerInfo));
-  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+  esp_now_register_recv_cb(OnDataRecv);
 
-  //Spesifiserer sending-kanalen, og enkrypsjonen
-  peerInfo.channel = 0;
-  peerInfo.encrypt = false;
+  WiFi.begin(ssid, WPA2_AUTH_PEAP,
+             EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD);
 
-  //Registrerer peer
-  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
-    Serial.println("Failed to add peer");
-    return;
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
   }
+
+  Serial.println("\nWiFi tilkoblet");
+  Serial.println(WiFi.localIP());
+
+  server.on("/", passasjerDatabase);
+  server.on("/download", downloadMeasurements);
+  server.begin();
+
+  Serial.println("Webserver startet");
 }
 
+// ---------- LOOP ----------
+
 void loop() {
-
-  //Sjekker om data er tilgjengelig for å lese
   if (mySerial.available()) {
-    
-    //Kopierer den leste Json-filen
-    recievedMessage = mySerial.readStringUntil('\n');
-    Serial.println("Recieved: " + recievedMessage);
+    String receivedKey = mySerial.readStringUntil('\n');
+    receivedKey.trim();
 
-    //Definerer den deserialiserte Json-filen
-    StaticJsonDocument<256> doc;
-
-    //Dersom deserialiseringen ikke fungerer blir error høy, hvis ikke lav
-    DeserializationError error = deserializeJson(doc, recievedMessage);
-
-    if (error) {
-      Serial.print("JSON parse error: ");
-      Serial.println(error.c_str());
-      //Dersom deserialiseringen ikke fungerer (ikke riktig format) --> Rød diode lyser (QR-scanningen fungerte ikke)
-      digitalWrite(ledPin_2, HIGH);
-      //Lyser i ett sekund
-      delay(1000);
-      digitalWrite(ledPin_2, LOW);
-      return;
-    }
-
-    //Kopierer alle variablene til QR-koden inn i structen "myData" 
-    strncpy(myData.ticketID, doc["ticketID"], sizeof(myData.ticketID));
-    myData.amountCustomers = doc["amountCustomers"];
-    //Må først endre formatet til sessionKey
-    String uuid = asciiHexToUUID(doc["sessionKey"]);
-    strncpy(myData.sessionKey, uuid.c_str(), sizeof(myData.sessionKey));
-    Serial.println(uuid.c_str());
-
-    //"myData" blir sendt via ESP-NOW. Samme oppsett som linje 119. 
-    esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
-
-    //Siden deserialiseringen fungerte er QR-koden i riktig format --> Grønn diode lyser i ett sekund
-    digitalWrite(ledPin_3, HIGH);
-    delay(1000);
-    digitalWrite(ledPin_3, LOW);
-
-    //Bare for å se at sendingen gikk bra via serial monitor
-    if (result == ESP_OK){
-      Serial.println("Sending confirmed");
-    }
-    else {
-      Serial.println("Sending error");
+    for (int i = 0; i < ticketCount; i++) {
+      if (receivedKey.equals(tickets[i].sessionKey)) {
+        fjernBillett(i);
+        break;
+      }
     }
   }
-  
+
+  server.handleClient();
 }
