@@ -6,9 +6,9 @@
 #include <HardwareSerial.h>
 #define TXD2 16
 #define RXD2 17
-#define EAP_IDENTITY "matstbo@stud.ntnu.no" //Ditt brukernavn (som nevnt over)
-#define EAP_USERNAME "matstbo@stud.ntnu.no" //Ofte det samme som identity
-#define EAP_PASSWORD "Detsnørdetsnørtittelibom30" //Ditt Feide-passord
+#define EAP_IDENTITY "..." //Ditt brukernavn (som nevnt over)
+#define EAP_USERNAME "..." //Ofte det samme som identity
+#define EAP_PASSWORD "..." //Ditt Feide-passord
 #define MAX_TICKETS 100 //Maksimal mengde billetter i databasen (webserver)
 
 //UART-setup
